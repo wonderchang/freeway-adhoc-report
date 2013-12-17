@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8">
+    <title>Freeway Ad-Hoc</title>
+    <link rel="stylesheet" href="./style.css" />
+  </head>
+  <body>
+    <div id="page" class="container">
+      <!--h1>Freeway Ad-Hoc Application</h1-->
+      <div id="freeway">
+
+      </div>
+    </div>
+    <script src="http://d3js.org/d3.v3.min.js"></script>
+    <script>
+
+      var car_no = 0;
+      var freeway = d3.select("#freeway").append("svg");
+
+
+
+
+      setInterval(emit_car, 1000);
+      setInterval(show_car_info, 1);
+
+      function remove_car() { 
+      }
+
+      function show_car_info() {
+	console.log(d3.selectAll("circle")[0][0].getAttribute("cx"));
+      }
+
+      function emit_car() {
+	var speed = parseInt(Math.random() * 1000 + 5000);
+	var cy = 25 * ((parseInt(Math.random() * 100) % 3) + 1);
+	car_no += 1;
+	freeway.append("circle").attr("id", "car-" + car_no)
+	  .attr("r", 5).attr("cx", 0).attr("cy", cy)
+	  .transition().ease("linear").duration(speed).attr("cx", 985).call(remove_car);
+      }
+
+
+
+
+    </script>
+  </body>
+</html>
+
+
