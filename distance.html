@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8">
+    <title>Range</title>
+    <link rel="stylesheet" href="./style.css" />
+  </head>
+  <body>
+    <div class="page">
+      <header>
+	<h1>可傳送距離</h1>
+      </header>
+      <section>
+	<p>
+	  可傳送距離
+	</p>
+      </section>
+      <section>
+	<h2>1. 與車輛數目之關係</h2>
+	<p><p>
+	<div class="graph">
+	  <div class="left-graph"></div>
+	  <div class="right-graph"></div>
+	  <div class="left-graph-label">Figure 1, 效能比率</div>
+	  <div class="right-graph-label">Figure 2, 傳送成本比率</div>
+	</div>
+	<div class="content">
+	</div>
+      </section>
+    </div>
+    <script src="http://d3js.org/d3.v3.js"></script>
+    <script src="./app.js"></script>
+    <script>
+
+      var left_graph = d3.select(".left-graph").append("svg").attr("width", 480).attr("height",350).append("g").attr("transform", "translate(" + margin.left + "," + margin.top + ")");
+      var left_color_set = d3.scale.category10();
+      var left_color_counter = 0;
+      draw_line(left_graph, "./distance/data/d-10_c-2_msr-0.8_pr-0.7_effi.tsv", left_color_set, left_color_counter++, 0);
+      draw_line(left_graph, "./distance/data/d-25_c-2_msr-0.8_pr-0.7_effi.tsv", left_color_set, left_color_counter++, 0);
+      draw_line(left_graph, "./distance/data/d-50_c-2_msr-0.8_pr-0.7_effi.tsv", left_color_set, left_color_counter++, 0);
+      draw_line(left_graph, "./distance/data/d-70_c-2_msr-0.8_pr-0.7_effi.tsv", left_color_set, left_color_counter++, 0);
+
+      var right_graph = d3.select(".right-graph").append("svg").attr("width", 480).attr("height", 350).append("g").attr("transform", "translate(" + margin.left + "," + margin.top + ")");
+      var right_color_set = d3.scale.category10();
+      var right_color_counter = 0;
+      draw_line(right_graph, "./distance/data/d-10_c-2_msr-0.8_pr-0.7_cost.tsv", right_color_set, right_color_counter++, 50);
+      draw_line(right_graph, "./distance/data/d-25_c-2_msr-0.8_pr-0.7_cost.tsv", right_color_set, right_color_counter++, 50);
+      draw_line(right_graph, "./distance/data/d-50_c-2_msr-0.8_pr-0.7_cost.tsv", right_color_set, right_color_counter++, 50);
+      draw_line(right_graph, "./distance/data/d-70_c-2_msr-0.8_pr-0.7_cost.tsv", right_color_set, right_color_counter++, 50);
+ 
+    </script>
+  </body>
+</html>
