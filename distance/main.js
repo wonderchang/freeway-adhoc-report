@@ -12,19 +12,18 @@ var CAR_NUM;
 var TIMES = 250;
 
 //Data Declaration
-var freeway;
-var receive_packet_num;
-var receive_or_not;
-var total_Rx_num = 0;
-var total_received_packet_num = 0;
 var filename;
+var total_Rx_num;
+var total_Rx_cost;
+var freeway;
 var effi_output;
 var cost_output;
 
+//Check the input command argument is correct or not
 if(process.argv.length == 6) {
 
   //Give the output filename
-  filename = "d-" + DISTANCE + "_c-" + COUNTER + "_msr-" + MSG_SUCCESSFUL_RATE + "_pr-" + PR;
+  filename = "d-" + DISTANCE + "_c-" + COUNTER + "_msr-" + MS_RATE + "_pr-" + PR;
 
   //Open the file to write, write two file concurrently, one is the efficiency, the other is cost
   fs.open("./data/" + filename + "_effi.tsv", 'w', function(err, fd_effi) {
@@ -41,26 +40,22 @@ if(process.argv.length == 6) {
 	}
 
 	//Initital data, for each car_num
-	receive_packet_num = new Array(CAR_NUM);	//The total packets that each car node get
-	receive_or_not = new Array(CAR_NUM);		//Mark the car node has received the packet or not
-	total_Rx_num = 0;				//The total number of the car nodes which has received the packet
-	total_received_packet_num = 0;			//The total number of the received packets
+	total_Rx_num = 0;	//The total number of the car nodes which has received the packet
+	total_Rx_cost = 0;	//The total number of the received packets
 
 	//Run the several times, to get the average results
 	for(var times = 0; times < TIMES; times++) {
 
 	  //Initial data, for each time
-	  freeway = [];					//the car node list
-	  for(var i = 0; i < CAR_NUM; i++) {
-	    receive_packet_num[i] = 0;
-	    receive_or_not[i] = 0;
-	  }
+	  freeway = [];					//Clean the freeway
 
 	  //Generate the car location in 1 km freeway
 	  for(var i = 0; i < CAR_NUM; i++) {
 	    freeway.push({
 	      "x": ((parseInt(Math.random() * 100000)) / 100),
-	      "counter": 0
+	      "counter": 0,
+	      "received": 0,
+	      "cost": 0
 	    });
 	  }
 
@@ -83,26 +78,26 @@ if(process.argv.length == 6) {
 	  });
 
 	  //Give the first car the first packet
-	  receive_packet_num[0] = 1;
-	  receive_or_not[0] = 1;
+	  freeway[0].received = 1;
+	  freeway[0].cost = 1;
 
 	  //Go passing the packet
 	  pass_packet(freeway[0]);
 
 	  //Calculate the average result after running serverl times, and accumulate it
-	  total_Rx_num += avg_Rx_num(received_or_not);
-	  total_received_packet_num += avg_received_packet_num(received_packet_num);
+	  total_Rx_num += avg_Rx_num(freeway);
+	  total_Rx_cost += avg_Rx_cost(freeway);
 	}
 
 	//Average the total num of severl times running
 	effi_output = parseInt(10000 * (total_Rx_num / TIMES)) / 10000;
-	cost_output = parseInt(10000 * (total_received_packet_num / TIMES)) / 10000;
+	cost_output = parseInt(10000 * (total_Rx_cost / TIMES)) / 10000;
 
 	//Write the result to two file, one is efficiency, the other is cost
 	fs.write(fd_effi, CAR_NUM + "\t" + effi_output + "\n");
 	fs.write(fd_cost, CAR_NUM + "\t" + cost_output + "\n");
 
-	//Print to screen to check
+	//Print to screen for viewing check
 	console.log(CAR_NUM + "\t" + effi_output + "\t" + cost_output);
       }
     });
@@ -115,55 +110,67 @@ else {
 }
 
 function pass_packet(car) {
-  var counter = 0;
-  var enough = 0;
+
+  //Data declaration
   var received = [];
+
+  //Push the reachable car id
   for(var i = 0; i < car.reachable.length; i++) {
     received.push(car.reachable[i]);
   }
+
+  //Start boradcasting
   while(car.counter < COUNTER && received != null) {
+
+    //Dice PR
     if(Math.random() <= PR) {
+
+      //Now mean the transimssion terminal work fine, counter++ for boardcasting once
       car.counter++;
+
+      //Send the package to the reachable car nodes one by one
       received.forEach(function(other_car) {
-	receive_packet_num[other_car]++;
-	if(Math.random() <= MS_RATE) {
-	  receive_or_not[other_car] = 1;
-	  //console.log("Tx-car-" + car.id + ", counter = " + car.counter + ", " + car.id + "->" + other_car + " (success)");
-	  var index = received.indexOf(other_car);
-	  if(index > -1) {
-	    received.splice(index, 1);
+	if(other_car != null) {
+
+	  //Record the packet cost for it
+	  freeway[other_car].cost++;
+
+	  //Dice MS_RATE
+	  if(Math.random() <= MS_RATE) {
+
+	    //Now mean the receiver has get the packet successfully
+	    freeway[other_car].received = 1;
+
+	    //Clean the received car out of the reachable array list
+	    var index = received.indexOf(other_car);
+	    received[index] = null;
+
+	    //Go through passing next car
+	    pass_packet(freeway[other_car]);
 	  }
-	  else {
-	    console.log("The unexpected error occured.");
-	  }
-      pass_packet(freeway[other_car]);
-	}
-	else {
-	  //console.log("Tx-car-" + car.id + ", counter = " + car.counter + ", " + car.id + "->" + other_car + " (fail)");
 	}
       });
     }
-    else {
-    }
   }
 }
 
-
-function avg_Rx_num(received_or_not) {
+//Calculate the averageo of the efficiency
+function avg_Rx_num(car_list) {
   var sum = 0;
-  var length = received_or_not.length - 1;
-  for(var i = 0; i < CAR_NUM; i++) {
-    sum += receive_or_not[i];
+  var length = car_list.length;
+  for(var i = 1; i < length; i++) {
+    sum += car_list[i].received;
   }
-  return ((sum - 1) / length);
+  return (sum / (length - 1));
 }
 
-function avg_received_packet_num(received_packet_num) {
-  var sum = 0;
-  var sum_received = 0;
-  for(var i = 0; i < CAR_NUM; i++) {
-    sum += receive_packet_num[i];
-    sum_received += receive_or_not[i];
+//Calculate the averageo of the cost
+function avg_Rx_cost(car_list) {
+  var sum_num = 0;
+  var sum_cost = 0;
+  for(var i = 1; i < car_list.length; i++) {
+    sum_cost += car_list[i].cost;
+    sum_num += car_list[i].received;
   }
-  return (sum / sum_received);
+  return ((sum_num != 0) ? (sum_cost / sum_num) : 0);
 }
