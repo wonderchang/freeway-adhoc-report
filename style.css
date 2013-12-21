@@ -41,10 +41,6 @@ section {
   box-shadow:         0px 0px 12px rgba(50, 50, 50, 0.75);
 }
 
-.graph {
-  height: 400px;
-}
-
 .left-graph {
   width: 480px;
   height: 350px;
@@ -88,3 +84,19 @@ section {
 .x.axis path { 
   display: none; 
 }
+table { margin: auto; border: 1px solid #000; }
+td, th {
+  border: 1px solid #000;
+  width: 200px;
+  text-align: center;
+}
+.table_light_gray {
+  background-color: #DDD;
+}
+.table_deep_gray {
+  background-color: #AAA;
+}
+a {
+  text-decoration: none;
+}
+

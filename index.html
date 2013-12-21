@@ -6,7 +6,7 @@
     <link rel="stylesheet" href="./style.css" />
   </head>
   <body>
-    <div class="page" style="height: 8000px;">
+    <div class="page" style="height: 10000px;">
 
       <header class="text-center">
 	<h1>高速公路車載網路之<br />封包傳遞效能成本模擬分析</h1>
@@ -101,7 +101,7 @@
 	<h2>程式說明</h2>
 	<p>
 	  &nbsp;&nbsp;&nbsp;&nbsp;
-	  所有程式與相關結果開放在<a href="https://github.com/wonderchang/freeway-ad-hoc">Github<img src="github.gif" height="25" align="top" /></a>。
+	  所有程式與相關結果開放在<a href="https://github.com/wonderchang/freeway-ad-hoc"><img src="github.gif" height="25" align="top" />Github</a>。
 	</p>
 	<h3 class="layer1">1. 參數設定</h3>
 	<p class="layer2">
@@ -140,7 +140,7 @@
 	  「x」是其座落的位置，單位為公尺;
 	  「counter」表示該車輛已傳送過幾次封包;
 	  「received」表是否曾收到過封包，1代表有，0代表無;
-	  「packet_num」表示該車輛已收到幾個封包;
+	  「cost」表示該車輛已收到幾個封包;
 	  「reachable」是可傳送距離之車輛節點之列表，以陣列形式記錄。
 	  以上程式碼為例，該車的編號為3，其坐落在距離模擬之起始位置的144.78公尺處，
 	  供廣播了兩次封包給其他節點，
@@ -156,7 +156,7 @@
 	      <span class="tab">"x": 144.78,</span><br /> 
 	      <span class="tab">"counter": 2,</span><br />
 	      <span class="tab">"received: 1,</span><br />
-	      <span class="tab">"packet_num": 2,</span><br />
+	      <span class="tab">"cost": 2,</span><br />
 	      <span class="tab">"reachable": [4, 5, 6, 7]</span><br /> 
 	      }
 	    </code>
@@ -349,12 +349,60 @@
       </section>
       <section>
 	<h2>模擬成果</h2>
-	<p>根據四個控制因素，我們可以簡單控制一些參數來觀察彼此之間的影響</p>
+	<p>
+	  根據四個控制因素，我們可以簡單控制一些參數來觀察彼此之間的影響，由於可傳送之距離視為最基本的通訊限制條件，
+	  因此在各項比較當中都會有不同的距離值來對應，共選取四個值，分別是：<br />
+	  <span class="layer1" style="font-weight: bold; margin:10px 0px; display: block;">DISTANCE = 
+	    <span style="color: #1F77B4;">10 m</span>,	  
+	    <span style="color: #FF7f0E;">20 m</span>,	  
+	    <span style="color: #2CA02C;">30 m</span>,	  
+	    <span style="color: #D62728;">50 m</span>
+	  </span>
+	  其顏色顯示便是下面圖表所對應之顏色。<br />
+	  <table>
+	    <tr>
+	      <th class="table_deep_gray"></th>
+	      <th class="table_deep_gray">COUNTER</th>
+	      <th class="table_deep_gray">PR</th>
+	      <th class="table_deep_gray">MS_RATE</th>
+	    </tr> 
+	    <tr>
+	      <td class="table_light_gray">High Value</td>
+	      <td>6</td>
+	      <td>0.7</td>
+	      <td>0.8</td>
+	    </tr> 
+	    <tr>
+	      <td class="table_light_gray">Low Value</td>
+	      <td>2</td>
+	      <td>0.2</td>
+	      <td>0.3</td>
+	    </tr> 
+	  </table>
+	</p>
 	<div class="graph">
-	  <div class="left-graph"></div>
-	  <div class="right-graph"></div>
+	  <div id="g1e" class="left-graph"></div>
+	  <div id="g1c" class="right-graph"></div>
 	  <div class="left-graph-label">Figure 1, 效能比率</div>
 	  <div class="right-graph-label">Figure 2, 傳送成本比率</div>
+	</div>
+	<div class="graph">
+	  <div id="g2e" class="left-graph"></div>
+	  <div id="g2c" class="right-graph"></div>
+	  <div class="left-graph-label">Figure 3, 效能比率</div>
+	  <div class="right-graph-label">Figure 4, 傳送成本比率</div>
+	</div>
+	<div class="graph">
+	  <div id="g3e" class="left-graph"></div>
+	  <div id="g3c" class="right-graph"></div>
+	  <div class="left-graph-label">Figure 5, 效能比率</div>
+	  <div class="right-graph-label">Figure 6, 傳送成本比率</div>
+	</div>
+	<div class="graph">
+	  <div id="g4e" class="left-graph"></div>
+	  <div id="g4c" class="right-graph"></div>
+	  <div class="left-graph-label">Figure 7, 效能比率</div>
+	  <div class="right-graph-label">Figure 8, 傳送成本比率</div>
 	</div>
       </section>
 
@@ -364,22 +412,119 @@
     <script src="./app.js"></script>
     <script>
 
-      var left_graph = d3.select(".left-graph").append("svg").attr("width", 480).attr("height",350).append("g").attr("transform", "translate(" + margin.left + "," + margin.top + ")");
+      var left_graph = d3.select("#g1e").append("svg").attr("width", 480).attr("height",350).append("g").attr("transform", "translate(" + margin.left + "," + margin.top + ")");
       var left_color_set = d3.scale.category10();
-      var left_color_counter = 0;
-      draw_line(left_graph, "./distance/data/d-10_c-2_msr-0.8_pr-0.7_effi.tsv", left_color_set, left_color_counter++, 0);
-      draw_line(left_graph, "./distance/data/d-25_c-2_msr-0.8_pr-0.7_effi.tsv", left_color_set, left_color_counter++, 0);
-      draw_line(left_graph, "./distance/data/d-50_c-2_msr-0.8_pr-0.7_effi.tsv", left_color_set, left_color_counter++, 0);
-      draw_line(left_graph, "./distance/data/d-70_c-2_msr-0.8_pr-0.7_effi.tsv", left_color_set, left_color_counter++, 0);
+      draw_line(left_graph, "./distance/data/d-10_c-2_pr-0.7_msr-0.8_effi.tsv", left_color_set, 0, 0);
+      draw_line(left_graph, "./distance/data/d-20_c-2_pr-0.7_msr-0.8_effi.tsv", left_color_set, 1, 0);
+      draw_line(left_graph, "./distance/data/d-30_c-2_pr-0.7_msr-0.8_effi.tsv", left_color_set, 2, 0);
+      draw_line(left_graph, "./distance/data/d-50_c-2_pr-0.7_msr-0.8_effi.tsv", left_color_set, 3, 0);
 
-      var right_graph = d3.select(".right-graph").append("svg").attr("width", 480).attr("height", 350).append("g").attr("transform", "translate(" + margin.left + "," + margin.top + ")");
+      var right_graph = d3.select("#g1c").append("svg").attr("width", 480).attr("height", 350).append("g").attr("transform", "translate(" + margin.left + "," + margin.top + ")");
       var right_color_set = d3.scale.category10();
-      var right_color_counter = 0;
-      draw_line(right_graph, "./distance/data/d-10_c-2_msr-0.8_pr-0.7_cost.tsv", right_color_set, right_color_counter++, 80);
-      draw_line(right_graph, "./distance/data/d-25_c-2_msr-0.8_pr-0.7_cost.tsv", right_color_set, right_color_counter++, 80);
-      draw_line(right_graph, "./distance/data/d-50_c-2_msr-0.8_pr-0.7_cost.tsv", right_color_set, right_color_counter++, 80);
-      draw_line(right_graph, "./distance/data/d-70_c-2_msr-0.8_pr-0.7_cost.tsv", right_color_set, right_color_counter++, 80);
+      draw_line(right_graph, "./distance/data/d-10_c-2_pr-0.7_msr-0.8_cost.tsv", right_color_set, 0, 70);
+      draw_line(right_graph, "./distance/data/d-20_c-2_pr-0.7_msr-0.8_cost.tsv", right_color_set, 1, 70);
+      draw_line(right_graph, "./distance/data/d-30_c-2_pr-0.7_msr-0.8_cost.tsv", right_color_set, 2, 70);
+      draw_line(right_graph, "./distance/data/d-50_c-2_pr-0.7_msr-0.8_cost.tsv", right_color_set, 3, 70);
  
+      var left_graph = d3.select("#g2e").append("svg").attr("width", 480).attr("height",350).append("g").attr("transform", "translate(" + margin.left + "," + margin.top + ")");
+      var left_color_set = d3.scale.category10();
+      draw_line(left_graph, "./distance/data/d-10_c-2_pr-0.7_msr-0.8_effi.tsv", left_color_set, 0, 0);
+      draw_line(left_graph, "./distance/data/d-10_c-2_pr-0.7_msr-0.3_effi.tsv", left_color_set, 0, 0);
+      draw_line(left_graph, "./distance/data/d-10_c-2_pr-0.2_msr-0.3_effi.tsv", left_color_set, 0, 0);
+      draw_line(left_graph, "./distance/data/d-10_c-2_pr-0.2_msr-0.8_effi.tsv", left_color_set, 0, 0);
+      draw_line(left_graph, "./distance/data/d-20_c-2_pr-0.7_msr-0.8_effi.tsv", left_color_set, 1, 0);
+      draw_line(left_graph, "./distance/data/d-20_c-2_pr-0.7_msr-0.3_effi.tsv", left_color_set, 1, 0);
+      draw_line(left_graph, "./distance/data/d-20_c-2_pr-0.2_msr-0.3_effi.tsv", left_color_set, 1, 0);
+      draw_line(left_graph, "./distance/data/d-20_c-2_pr-0.2_msr-0.8_effi.tsv", left_color_set, 1, 0);
+      draw_line(left_graph, "./distance/data/d-30_c-2_pr-0.7_msr-0.8_effi.tsv", left_color_set, 2, 0);
+      draw_line(left_graph, "./distance/data/d-30_c-2_pr-0.7_msr-0.3_effi.tsv", left_color_set, 2, 0);
+      draw_line(left_graph, "./distance/data/d-30_c-2_pr-0.2_msr-0.3_effi.tsv", left_color_set, 2, 0);
+      draw_line(left_graph, "./distance/data/d-30_c-2_pr-0.2_msr-0.8_effi.tsv", left_color_set, 2, 0);
+      draw_line(left_graph, "./distance/data/d-50_c-2_pr-0.7_msr-0.8_effi.tsv", left_color_set, 3, 0);
+      draw_line(left_graph, "./distance/data/d-50_c-2_pr-0.7_msr-0.3_effi.tsv", left_color_set, 3, 0);
+      draw_line(left_graph, "./distance/data/d-50_c-2_pr-0.2_msr-0.3_effi.tsv", left_color_set, 3, 0);
+      draw_line(left_graph, "./distance/data/d-50_c-2_pr-0.2_msr-0.8_effi.tsv", left_color_set, 3, 0);
+
+      left_graph.append("text").text("PR = 0.7, MS_RATE = 0.8").attr("stroke", "#1F77B4").attr("stroke-width", "1px").attr("x", "150px").attr("y", "100px");
+      left_graph.append("text").text("PR = 0.2, MS_RATE = 0.8").attr("stroke", "#1F77B4").attr("stroke-width", "1px").attr("x", "120px").attr("y", "180px");
+      left_graph.append("text").text("PR = 0.7, MS_RATE = 0.3").attr("stroke", "#1F77B4").attr("stroke-width", "1px").attr("x", "260px").attr("y", "140px");
+      left_graph.append("text").text("PR = 0.2, MS_RATE = 0.3").attr("stroke", "#1F77B4").attr("stroke-width", "1px").attr("x", "230px").attr("y", "220px");
+
+      var right_graph = d3.select("#g2c").append("svg").attr("width", 480).attr("height", 350).append("g").attr("transform", "translate(" + margin.left + "," + margin.top + ")");
+      var right_color_set = d3.scale.category10();
+      draw_line(right_graph, "./distance/data/d-10_c-2_pr-0.7_msr-0.8_cost.tsv", right_color_set, 0, 90);
+      draw_line(right_graph, "./distance/data/d-10_c-2_pr-0.7_msr-0.3_cost.tsv", right_color_set, 0, 90);
+      draw_line(right_graph, "./distance/data/d-10_c-2_pr-0.2_msr-0.3_cost.tsv", right_color_set, 0, 90);
+      draw_line(right_graph, "./distance/data/d-10_c-2_pr-0.2_msr-0.8_cost.tsv", right_color_set, 0, 90);
+      draw_line(right_graph, "./distance/data/d-20_c-2_pr-0.7_msr-0.8_cost.tsv", right_color_set, 1, 90);
+      draw_line(right_graph, "./distance/data/d-20_c-2_pr-0.7_msr-0.3_cost.tsv", right_color_set, 1, 90);
+      draw_line(right_graph, "./distance/data/d-20_c-2_pr-0.2_msr-0.3_cost.tsv", right_color_set, 1, 90);
+      draw_line(right_graph, "./distance/data/d-20_c-2_pr-0.2_msr-0.8_cost.tsv", right_color_set, 1, 90);
+      draw_line(right_graph, "./distance/data/d-30_c-2_pr-0.7_msr-0.8_cost.tsv", right_color_set, 2, 90);
+      draw_line(right_graph, "./distance/data/d-30_c-2_pr-0.7_msr-0.3_cost.tsv", right_color_set, 2, 90);
+      draw_line(right_graph, "./distance/data/d-30_c-2_pr-0.2_msr-0.3_cost.tsv", right_color_set, 2, 90);
+      draw_line(right_graph, "./distance/data/d-30_c-2_pr-0.2_msr-0.8_cost.tsv", right_color_set, 2, 90);
+      draw_line(right_graph, "./distance/data/d-50_c-2_pr-0.7_msr-0.8_cost.tsv", right_color_set, 3, 90);
+      draw_line(right_graph, "./distance/data/d-50_c-2_pr-0.7_msr-0.3_cost.tsv", right_color_set, 3, 90);
+      draw_line(right_graph, "./distance/data/d-50_c-2_pr-0.2_msr-0.3_cost.tsv", right_color_set, 3, 90);
+      draw_line(right_graph, "./distance/data/d-50_c-2_pr-0.2_msr-0.8_cost.tsv", right_color_set, 3, 90);
+
+      right_graph.append("text").text("PR = 0.7, MS_RATE = 0.8").attr("stroke", "#D62728").attr("stroke-width", "1px").attr("x", "250px").attr("y", "150px");
+      right_graph.append("text").text("PR = 0.2, MS_RATE = 0.8").attr("stroke", "#D62728").attr("stroke-width", "1px").attr("x", "170px").attr("y", "200px");
+      right_graph.append("text").text("PR = 0.7, MS_RATE = 0.3").attr("stroke", "#D62728").attr("stroke-width", "1px").attr("x", "230px").attr("y", "75px");
+      right_graph.append("text").text("PR = 0.2, MS_RATE = 0.3").attr("stroke", "#D62728").attr("stroke-width", "1px").attr("x", "150px").attr("y", "125px");
+
+      var left_graph = d3.select("#g3e").append("svg").attr("width", 480).attr("height",350).append("g").attr("transform", "translate(" + margin.left + "," + margin.top + ")");
+      var left_color_set = d3.scale.category10();
+      draw_line(left_graph, "./distance/data/d-10_c-6_pr-0.7_msr-0.8_effi.tsv", left_color_set, 0, 0);
+      draw_line(left_graph, "./distance/data/d-20_c-6_pr-0.7_msr-0.8_effi.tsv", left_color_set, 1, 0);
+      draw_line(left_graph, "./distance/data/d-30_c-6_pr-0.7_msr-0.8_effi.tsv", left_color_set, 2, 0);
+      draw_line(left_graph, "./distance/data/d-50_c-6_pr-0.7_msr-0.8_effi.tsv", left_color_set, 3, 0);
+
+      var right_graph = d3.select("#g3c").append("svg").attr("width", 480).attr("height", 350).append("g").attr("transform", "translate(" + margin.left + "," + margin.top + ")");
+      var right_color_set = d3.scale.category10();
+      draw_line(right_graph, "./distance/data/d-10_c-6_pr-0.7_msr-0.8_cost.tsv", right_color_set, 0, 150);
+      draw_line(right_graph, "./distance/data/d-20_c-6_pr-0.7_msr-0.8_cost.tsv", right_color_set, 1, 150);
+      draw_line(right_graph, "./distance/data/d-30_c-6_pr-0.7_msr-0.8_cost.tsv", right_color_set, 2, 150);
+      draw_line(right_graph, "./distance/data/d-50_c-6_pr-0.7_msr-0.8_cost.tsv", right_color_set, 3, 150);
+ 
+      var left_graph = d3.select("#g4e").append("svg").attr("width", 480).attr("height",350).append("g").attr("transform", "translate(" + margin.left + "," + margin.top + ")");
+      var left_color_set = d3.scale.category10();
+      draw_line(left_graph, "./distance/data/d-10_c-6_pr-0.7_msr-0.8_effi.tsv", left_color_set, 0, 0);
+      draw_line(left_graph, "./distance/data/d-10_c-6_pr-0.7_msr-0.3_effi.tsv", left_color_set, 0, 0);
+      draw_line(left_graph, "./distance/data/d-10_c-6_pr-0.2_msr-0.3_effi.tsv", left_color_set, 0, 0);
+      draw_line(left_graph, "./distance/data/d-10_c-6_pr-0.2_msr-0.8_effi.tsv", left_color_set, 0, 0);
+      draw_line(left_graph, "./distance/data/d-20_c-6_pr-0.7_msr-0.8_effi.tsv", left_color_set, 1, 0);
+      draw_line(left_graph, "./distance/data/d-20_c-6_pr-0.7_msr-0.3_effi.tsv", left_color_set, 1, 0);
+      draw_line(left_graph, "./distance/data/d-20_c-6_pr-0.2_msr-0.3_effi.tsv", left_color_set, 1, 0);
+      draw_line(left_graph, "./distance/data/d-20_c-6_pr-0.2_msr-0.8_effi.tsv", left_color_set, 1, 0);
+      draw_line(left_graph, "./distance/data/d-30_c-6_pr-0.7_msr-0.8_effi.tsv", left_color_set, 2, 0);
+      draw_line(left_graph, "./distance/data/d-30_c-6_pr-0.7_msr-0.3_effi.tsv", left_color_set, 2, 0);
+      draw_line(left_graph, "./distance/data/d-30_c-6_pr-0.2_msr-0.3_effi.tsv", left_color_set, 2, 0);
+      draw_line(left_graph, "./distance/data/d-30_c-6_pr-0.2_msr-0.8_effi.tsv", left_color_set, 2, 0);
+      draw_line(left_graph, "./distance/data/d-50_c-6_pr-0.7_msr-0.8_effi.tsv", left_color_set, 3, 0);
+      draw_line(left_graph, "./distance/data/d-50_c-6_pr-0.7_msr-0.3_effi.tsv", left_color_set, 3, 0);
+      draw_line(left_graph, "./distance/data/d-50_c-6_pr-0.2_msr-0.3_effi.tsv", left_color_set, 3, 0);
+      draw_line(left_graph, "./distance/data/d-50_c-6_pr-0.2_msr-0.8_effi.tsv", left_color_set, 3, 0);
+
+      var right_graph = d3.select("#g4c").append("svg").attr("width", 480).attr("height", 350).append("g").attr("transform", "translate(" + margin.left + "," + margin.top + ")");
+      var right_color_set = d3.scale.category10();
+      draw_line(right_graph, "./distance/data/d-10_c-6_pr-0.7_msr-0.8_cost.tsv", right_color_set, 0, 150);
+      draw_line(right_graph, "./distance/data/d-10_c-6_pr-0.7_msr-0.3_cost.tsv", right_color_set, 0, 150);
+      draw_line(right_graph, "./distance/data/d-10_c-6_pr-0.2_msr-0.3_cost.tsv", right_color_set, 0, 150);
+      draw_line(right_graph, "./distance/data/d-10_c-6_pr-0.2_msr-0.8_cost.tsv", right_color_set, 0, 150);
+      draw_line(right_graph, "./distance/data/d-20_c-6_pr-0.7_msr-0.8_cost.tsv", right_color_set, 1, 150);
+      draw_line(right_graph, "./distance/data/d-20_c-6_pr-0.7_msr-0.3_cost.tsv", right_color_set, 1, 150);
+      draw_line(right_graph, "./distance/data/d-20_c-6_pr-0.2_msr-0.3_cost.tsv", right_color_set, 1, 150);
+      draw_line(right_graph, "./distance/data/d-20_c-6_pr-0.2_msr-0.8_cost.tsv", right_color_set, 1, 150);
+      draw_line(right_graph, "./distance/data/d-30_c-6_pr-0.7_msr-0.8_cost.tsv", right_color_set, 2, 150);
+      draw_line(right_graph, "./distance/data/d-30_c-6_pr-0.7_msr-0.3_cost.tsv", right_color_set, 2, 150);
+      draw_line(right_graph, "./distance/data/d-30_c-6_pr-0.2_msr-0.3_cost.tsv", right_color_set, 2, 150);
+      draw_line(right_graph, "./distance/data/d-30_c-6_pr-0.2_msr-0.8_cost.tsv", right_color_set, 2, 150);
+      draw_line(right_graph, "./distance/data/d-50_c-6_pr-0.7_msr-0.8_cost.tsv", right_color_set, 3, 150);
+      draw_line(right_graph, "./distance/data/d-50_c-6_pr-0.7_msr-0.3_cost.tsv", right_color_set, 3, 150);
+      draw_line(right_graph, "./distance/data/d-50_c-6_pr-0.2_msr-0.3_cost.tsv", right_color_set, 3, 150);
+      draw_line(right_graph, "./distance/data/d-50_c-6_pr-0.2_msr-0.8_cost.tsv", right_color_set, 3, 150);
     </script>
   </body>
 </html>

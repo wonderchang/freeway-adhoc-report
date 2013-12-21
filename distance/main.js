@@ -4,8 +4,8 @@ var fs = require("fs");
 //Give 4 related argument values that will effect the system
 var DISTANCE = process.argv[2]; 
 var COUNTER = process.argv[3];
-var PR = process.argv[5];
-var MS_RATE = process.argv[4];
+var PR = process.argv[4];
+var MS_RATE = process.argv[5];
 
 //Run times variable
 var CAR_NUM;
@@ -23,7 +23,8 @@ var cost_output;
 if(process.argv.length == 6) {
 
   //Give the output filename
-  filename = "d-" + DISTANCE + "_c-" + COUNTER + "_msr-" + MS_RATE + "_pr-" + PR;
+  filename = "d-" + DISTANCE + "_c-" + COUNTER + "_pr-" + PR + "_msr-" + MS_RATE;
+  console.log(filename);
 
   //Open the file to write, write two file concurrently, one is the efficiency, the other is cost
   fs.open("./data/" + filename + "_effi.tsv", 'w', function(err, fd_effi) {
@@ -106,7 +107,7 @@ if(process.argv.length == 6) {
 else {
   console.log("Error input command.");
   console.log("Usage command line:\n");
-  console.log("\tnode main.js [distance] [counter] [msg_success] [Pr]\n");
+  console.log("\tnode main.js [distance] [counter] [Pr] [msg_success]\n");
 }
 
 function pass_packet(car) {
