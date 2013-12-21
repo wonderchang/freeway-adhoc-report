@@ -41,17 +41,34 @@ d3.tsv(filename, function(error, data) {
   node.append("g")
   .attr("class", "x axis")
   .attr("transform", "translate(0," + height + ")")
-  .call(xAxis);
+  .call(xAxis)
+  .append("text")
+  .attr("x", 330)
+  .attr("y", 30)
+  .text("Number of cars");
 
-  node.append("g")
-    .attr("class", "y axis")
-    .call(yAxis)
-    .append("text")
-    .attr("transform", "rotate(-90)")
-    .attr("y", 6)
-    .attr("dy", ".71em");
-    //.style("text-anchor", "end")
-    //.text("Probability");
+  if(label) {
+    node.append("g")
+      .attr("class", "y axis")
+      .call(yAxis)
+      .append("text")
+      .attr("transform", "rotate(-90)")
+      .attr("y", 6)
+      .attr("dy", ".71em")
+      .style("text-anchor", "end")
+      .text("Number of packets");
+  }
+  else {
+    node.append("g")
+      .attr("class", "y axis")
+      .call(yAxis)
+      .append("text")
+      .attr("transform", "rotate(-90)")
+      .attr("y", 6)
+      .attr("dy", ".71em")
+      .style("text-anchor", "end")
+      .text("Probability");
+  }
 
   node.append("path")
     .datum(data)

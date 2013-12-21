@@ -10,7 +10,7 @@
 
       <header class="text-center">
 	<h1>高速公路車載網路之<br />封包傳遞效能成本模擬分析</h1>
-	<h3>EE103A E24990019 張遠哲</h3>
+	<h3>電機系103A E24990019 張遠哲</h3>
 	<h3>指導老師：蘇淑茵</h3>
       </header>
 
@@ -124,7 +124,7 @@
 	<h3 class="layer1">2. 資料定義</h3>
 	<p class="layer2">
 	  &nbsp;&nbsp;&nbsp;&nbsp;
-	  整條高速公路有多少輛汽車, 以上述程式碼為例有100輛車在高速公路上。
+	  整條高速公路有多少輛汽車, 以上列程式碼為例有100輛車在高速公路上。
 	</p>
 	<h3 class="layer2">
 	  <div class="code_region">
@@ -142,7 +142,7 @@
 	  「received」表是否曾收到過封包，1代表有，0代表無;
 	  「cost」表示該車輛已收到幾個封包;
 	  「reachable」是可傳送距離之車輛節點之列表，以陣列形式記錄。
-	  以上程式碼為例，該車的編號為3，其坐落在距離模擬之起始位置的144.78公尺處，
+	  以下列程式碼為例，該車的編號為3，其坐落在距離模擬之起始位置的144.78公尺處，
 	  供廣播了兩次封包給其他節點，
 	  當然能傳給其他人代表曾收到過該封包過，
 	  而其收到的封包數目為2個，
@@ -205,7 +205,7 @@
 	  &nbsp;&nbsp;&nbsp;&nbsp;
 	  接著開始進入重送回圈，決定是否重送根據該節點車輛是否已經超過了重傳得最多次數，還有是否在可傳距離內的依然有可被允許傳送的節點，
 	  意思是說receiver陣列是否為空，為空的可能有兩個情況，一個是原本就沒有可傳送的點，另一個是可以傳送的節點都已傳完。
-	   
+
 	</p>
 	<h3 class="layer2">
 	  <div class="code_region">
@@ -358,173 +358,225 @@
 	    <span style="color: #2CA02C;">30 m</span>,	  
 	    <span style="color: #D62728;">50 m</span>
 	  </span>
-	  其顏色顯示便是下面圖表所對應之顏色。<br />
-	  <table>
-	    <tr>
-	      <th class="table_deep_gray"></th>
-	      <th class="table_deep_gray">COUNTER</th>
-	      <th class="table_deep_gray">PR</th>
-	      <th class="table_deep_gray">MS_RATE</th>
-	    </tr> 
-	    <tr>
-	      <td class="table_light_gray">High Value</td>
-	      <td>6</td>
-	      <td>0.7</td>
-	      <td>0.8</td>
-	    </tr> 
-	    <tr>
-	      <td class="table_light_gray">Low Value</td>
-	      <td>2</td>
-	      <td>0.2</td>
-	      <td>0.3</td>
-	    </tr> 
-	  </table>
+	  其顏色顯示便是下面圖表所對應之顏色。
+	</p>
+	<table>
+	  <tr>
+	    <th class="table_deep_gray"></th>
+	    <th class="table_deep_gray">COUNTER</th>
+	    <th class="table_deep_gray">PR</th>
+	    <th class="table_deep_gray">MS_RATE</th>
+	  </tr> 
+	  <tr>
+	    <td class="table_light_gray">High Value</td>
+	    <td>6</td>
+	    <td>0.7</td>
+	    <td>0.8</td>
+	  </tr> 
+	  <tr>
+	    <td class="table_light_gray">Low Value</td>
+	    <td>2</td>
+	    <td>0.2</td>
+	    <td>0.3</td>
+	  </tr> 
+	</table>
+	<br />
+	<h3 class="layer1">1. 看可傳送之距離變化</h3>
+	<p class="layer2">
+	  &nbsp;&nbsp;&nbsp;&nbsp;
+	  此模擬部分全部固定三個參數為固定，分別為COUNT = 2、PR = 0.7、MS_RATE = 0.8，並看其在四個可傳送距離的的變化。
+	  下圖Figure 1為效能比率圖，整條高速公路中有多少輛汽車接收到封包，可以發現其在車輛較少的情況下，較難讓大部份的車輛都收到封包，
+	  因為單位路徑上的車輛較少，車子與車子之間的距離可能較遠，因此會有較大的機率收不到，而同理當車越多，車子彼此之間的距離較短，
+	  對於相同的可傳距離，也就更容易傳送封包，而可傳距離越長，在同一車輛數目下，也更能讓所有的車輛都接收到封包。
+	</p>
+	<p class="layer2">
+	  &nbsp;&nbsp;&nbsp;&nbsp;
+	  Figure 2為接收到封包的成本比率，也就是說每個收到封包的車輛節點所花費的平均成本，即是經過多少次的封包重送才得以收到封包。
+	  當車輛數目越多，在同個控制變因條件下，所花費的成本越高，原因在於Flooding方法傳遞的關係，
+	  當節點收到封包後，將會對所有附近可傳的節點進行封包傳送，因此當車輛越多，整體所傳遞的封包數量也會增加，
+	  臨近可傳的點也會增加，因此平均每輛汽車都將會收到更多次的來自更多的其他車輛傳送的封包。
 	</p>
 	<div class="graph">
 	  <div id="g1e" class="left-graph"></div>
 	  <div id="g1c" class="right-graph"></div>
-	  <div class="left-graph-label">Figure 1, 效能比率</div>
-	  <div class="right-graph-label">Figure 2, 傳送成本比率</div>
+	  <div class="left-graph-label">Figure 1, 封包傳遞之效能比率</div>
+	  <div class="right-graph-label">Figure 2, 接收封包之成本比率</div>
 	</div>
+	<p class="layer2">
+	  &nbsp;&nbsp;&nbsp;&nbsp;
+	  另外可以發現Figure 2的曲線幾乎為經過圓點之直線，代表車輛數目與平均接收成本幾乎成一個正比關係，
+	  並且在等比例的可傳距離變化之間，其斜率也恰巧成一個比例在變化，
+	  這個原因可能是因為每輛車坐落的位置是利用隨機所選取，換句話說當有一定數量的時候，車輛所座落的位置將幾乎是均勻地分布在整條高速公路上，
+	  而可傳距離內的節點數量，對於每輛車來說也幾乎是同樣的數量，因此所增加傳遞的封包數也將以一定的數量成長。
+	</p>
+	<br />
+	<h3 class="layer1">2. 傳送與接收之成功率</h3>
+	<p class="layer2">
+	  &nbsp;&nbsp;&nbsp;&nbsp;
+	  下圖Figure 3、4圖仍為在COUNTER = 2的情況下，Figure 3中可以看到，接收成功率（MS_RATE）越高，理所當然大家越容易收到封包。
+	  Figure 4中，接收成功率越高，降低重傳的可能，相較起來成本就越低。
+	  而可以發現，不管傳送成功率（PR）高還是低，其都不影響其結果，曲線幾乎重疊在一起，
+	  這個部分要從程式架構去探討，傳送成功率只是去調整整個傳送和接收的機率，讓其表現能更加的隨機，
+	  去影響後面的接收成功率的表現，例如說，在可以允許傳送時，才能再去直骰子決定能否接收成功，而不允許的話便不能，
+	  而這樣造成可以成功接收的機率相較於只有判別接收成功率的話，那可能會忽略了一些細節。
+	</p>
 	<div class="graph">
 	  <div id="g2e" class="left-graph"></div>
 	  <div id="g2c" class="right-graph"></div>
-	  <div class="left-graph-label">Figure 3, 效能比率</div>
-	  <div class="right-graph-label">Figure 4, 傳送成本比率</div>
+	  <div class="left-graph-label">Figure 3, 封包傳遞之效能比率</div>
+	  <div class="right-graph-label">Figure 4, 接收封包之成本比率</div>
 	</div>
+	<h3 class="layer1">3. 重傳次數限制</h3>
+	<p class="layer2">
+	  &nbsp;&nbsp;&nbsp;&nbsp;
+	  下圖Figure 3、4圖仍為在COUNTER = 2的情況下，Figure 3中可以看到，接收成功率（MS_RATE）越高，理所當然大家越容易收到封包。
+	  Figure 4中，接收成功率越高，降低重傳的可能，相較起來成本就越低。
+	  而可以發現，不管傳送成功率（PR）高還是低，其都不影響其結果，曲線幾乎重疊在一起，
+	  這個部分要從程式架構去探討，傳送成功率只是去調整整個傳送和接收的機率，讓其表現能更加的隨機，
+	  去影響後面的接收成功率的表現，例如說，在可以允許傳送時，才能再去直骰子決定能否接收成功，而不允許的話便不能，
+	  而這樣造成可以成功接收的機率相較於只有判別接收成功率的話，那可能會忽略了一些細節。
+	</p>
 	<div class="graph">
 	  <div id="g3e" class="left-graph"></div>
 	  <div id="g3c" class="right-graph"></div>
-	  <div class="left-graph-label">Figure 5, 效能比率</div>
-	  <div class="right-graph-label">Figure 6, 傳送成本比率</div>
+	  <div class="left-graph-label">Figure 5, 封包傳遞之效能比率</div>
+	  <div class="right-graph-label">Figure 6, 接收封包之成本比率</div>
 	</div>
 	<div class="graph">
 	  <div id="g4e" class="left-graph"></div>
 	  <div id="g4c" class="right-graph"></div>
-	  <div class="left-graph-label">Figure 7, 效能比率</div>
-	  <div class="right-graph-label">Figure 8, 傳送成本比率</div>
+	  <div class="left-graph-label">Figure 7, 封包傳遞之效能比率</div>
+	  <div class="right-graph-label">Figure 8, 接收封包之成本比率</div>
 	</div>
       </section>
 
 
-    <script src="http://d3js.org/d3.v3.js"></script>
-    <script src="./dynamic-car-flow/app.js"></script>
-    <script src="./app.js"></script>
-    <script>
+      <script src="http://d3js.org/d3.v3.js"></script>
+      <script src="./dynamic-car-flow/app.js"></script>
+      <script src="./app.js"></script>
+      <script>
 
-      var left_graph = d3.select("#g1e").append("svg").attr("width", 480).attr("height",350).append("g").attr("transform", "translate(" + margin.left + "," + margin.top + ")");
-      var left_color_set = d3.scale.category10();
-      draw_line(left_graph, "./distance/data/d-10_c-2_pr-0.7_msr-0.8_effi.tsv", left_color_set, 0, 0);
-      draw_line(left_graph, "./distance/data/d-20_c-2_pr-0.7_msr-0.8_effi.tsv", left_color_set, 1, 0);
-      draw_line(left_graph, "./distance/data/d-30_c-2_pr-0.7_msr-0.8_effi.tsv", left_color_set, 2, 0);
-      draw_line(left_graph, "./distance/data/d-50_c-2_pr-0.7_msr-0.8_effi.tsv", left_color_set, 3, 0);
+	var left_graph = d3.select("#g1e").append("svg").attr("width", 480).attr("height",350).append("g").attr("transform", "translate(" + margin.left + "," + margin.top + ")");
+	var left_color_set = d3.scale.category10();
+	draw_line(left_graph, "./distance/data/d-10_c-2_pr-0.7_msr-0.8_effi.tsv", left_color_set, 0, 0);
+	draw_line(left_graph, "./distance/data/d-20_c-2_pr-0.7_msr-0.8_effi.tsv", left_color_set, 1, 0);
+	draw_line(left_graph, "./distance/data/d-30_c-2_pr-0.7_msr-0.8_effi.tsv", left_color_set, 2, 0);
+	draw_line(left_graph, "./distance/data/d-50_c-2_pr-0.7_msr-0.8_effi.tsv", left_color_set, 3, 0);
 
-      var right_graph = d3.select("#g1c").append("svg").attr("width", 480).attr("height", 350).append("g").attr("transform", "translate(" + margin.left + "," + margin.top + ")");
-      var right_color_set = d3.scale.category10();
-      draw_line(right_graph, "./distance/data/d-10_c-2_pr-0.7_msr-0.8_cost.tsv", right_color_set, 0, 70);
-      draw_line(right_graph, "./distance/data/d-20_c-2_pr-0.7_msr-0.8_cost.tsv", right_color_set, 1, 70);
-      draw_line(right_graph, "./distance/data/d-30_c-2_pr-0.7_msr-0.8_cost.tsv", right_color_set, 2, 70);
-      draw_line(right_graph, "./distance/data/d-50_c-2_pr-0.7_msr-0.8_cost.tsv", right_color_set, 3, 70);
- 
-      var left_graph = d3.select("#g2e").append("svg").attr("width", 480).attr("height",350).append("g").attr("transform", "translate(" + margin.left + "," + margin.top + ")");
-      var left_color_set = d3.scale.category10();
-      draw_line(left_graph, "./distance/data/d-10_c-2_pr-0.7_msr-0.8_effi.tsv", left_color_set, 0, 0);
-      draw_line(left_graph, "./distance/data/d-10_c-2_pr-0.7_msr-0.3_effi.tsv", left_color_set, 0, 0);
-      draw_line(left_graph, "./distance/data/d-10_c-2_pr-0.2_msr-0.3_effi.tsv", left_color_set, 0, 0);
-      draw_line(left_graph, "./distance/data/d-10_c-2_pr-0.2_msr-0.8_effi.tsv", left_color_set, 0, 0);
-      draw_line(left_graph, "./distance/data/d-20_c-2_pr-0.7_msr-0.8_effi.tsv", left_color_set, 1, 0);
-      draw_line(left_graph, "./distance/data/d-20_c-2_pr-0.7_msr-0.3_effi.tsv", left_color_set, 1, 0);
-      draw_line(left_graph, "./distance/data/d-20_c-2_pr-0.2_msr-0.3_effi.tsv", left_color_set, 1, 0);
-      draw_line(left_graph, "./distance/data/d-20_c-2_pr-0.2_msr-0.8_effi.tsv", left_color_set, 1, 0);
-      draw_line(left_graph, "./distance/data/d-30_c-2_pr-0.7_msr-0.8_effi.tsv", left_color_set, 2, 0);
-      draw_line(left_graph, "./distance/data/d-30_c-2_pr-0.7_msr-0.3_effi.tsv", left_color_set, 2, 0);
-      draw_line(left_graph, "./distance/data/d-30_c-2_pr-0.2_msr-0.3_effi.tsv", left_color_set, 2, 0);
-      draw_line(left_graph, "./distance/data/d-30_c-2_pr-0.2_msr-0.8_effi.tsv", left_color_set, 2, 0);
-      draw_line(left_graph, "./distance/data/d-50_c-2_pr-0.7_msr-0.8_effi.tsv", left_color_set, 3, 0);
-      draw_line(left_graph, "./distance/data/d-50_c-2_pr-0.7_msr-0.3_effi.tsv", left_color_set, 3, 0);
-      draw_line(left_graph, "./distance/data/d-50_c-2_pr-0.2_msr-0.3_effi.tsv", left_color_set, 3, 0);
-      draw_line(left_graph, "./distance/data/d-50_c-2_pr-0.2_msr-0.8_effi.tsv", left_color_set, 3, 0);
+	var right_graph = d3.select("#g1c").append("svg").attr("width", 480).attr("height", 350).append("g").attr("transform", "translate(" + margin.left + "," + margin.top + ")");
+	var right_color_set = d3.scale.category10();
+	draw_line(right_graph, "./distance/data/d-10_c-2_pr-0.7_msr-0.8_cost.tsv", right_color_set, 0, 65);
+	draw_line(right_graph, "./distance/data/d-20_c-2_pr-0.7_msr-0.8_cost.tsv", right_color_set, 1, 65);
+	draw_line(right_graph, "./distance/data/d-30_c-2_pr-0.7_msr-0.8_cost.tsv", right_color_set, 2, 65);
+	draw_line(right_graph, "./distance/data/d-50_c-2_pr-0.7_msr-0.8_cost.tsv", right_color_set, 3, 65);
 
-      left_graph.append("text").text("PR = 0.7, MS_RATE = 0.8").attr("stroke", "#1F77B4").attr("stroke-width", "1px").attr("x", "150px").attr("y", "100px");
-      left_graph.append("text").text("PR = 0.2, MS_RATE = 0.8").attr("stroke", "#1F77B4").attr("stroke-width", "1px").attr("x", "120px").attr("y", "180px");
-      left_graph.append("text").text("PR = 0.7, MS_RATE = 0.3").attr("stroke", "#1F77B4").attr("stroke-width", "1px").attr("x", "260px").attr("y", "140px");
-      left_graph.append("text").text("PR = 0.2, MS_RATE = 0.3").attr("stroke", "#1F77B4").attr("stroke-width", "1px").attr("x", "230px").attr("y", "220px");
+	var left_graph = d3.select("#g2e").append("svg").attr("width", 480).attr("height",350).append("g").attr("transform", "translate(" + margin.left + "," + margin.top + ")");
+	var left_color_set = d3.scale.category10();
+	draw_line(left_graph, "./distance/data/d-10_c-2_pr-0.7_msr-0.8_effi.tsv", left_color_set, 0, 0);
+	draw_line(left_graph, "./distance/data/d-10_c-2_pr-0.7_msr-0.3_effi.tsv", left_color_set, 0, 0);
+	draw_line(left_graph, "./distance/data/d-10_c-2_pr-0.2_msr-0.3_effi.tsv", left_color_set, 0, 0);
+	draw_line(left_graph, "./distance/data/d-10_c-2_pr-0.2_msr-0.8_effi.tsv", left_color_set, 0, 0);
+	draw_line(left_graph, "./distance/data/d-20_c-2_pr-0.7_msr-0.8_effi.tsv", left_color_set, 1, 0);
+	draw_line(left_graph, "./distance/data/d-20_c-2_pr-0.7_msr-0.3_effi.tsv", left_color_set, 1, 0);
+	draw_line(left_graph, "./distance/data/d-20_c-2_pr-0.2_msr-0.3_effi.tsv", left_color_set, 1, 0);
+	draw_line(left_graph, "./distance/data/d-20_c-2_pr-0.2_msr-0.8_effi.tsv", left_color_set, 1, 0);
+	draw_line(left_graph, "./distance/data/d-30_c-2_pr-0.7_msr-0.8_effi.tsv", left_color_set, 2, 0);
+	draw_line(left_graph, "./distance/data/d-30_c-2_pr-0.7_msr-0.3_effi.tsv", left_color_set, 2, 0);
+	draw_line(left_graph, "./distance/data/d-30_c-2_pr-0.2_msr-0.3_effi.tsv", left_color_set, 2, 0);
+	draw_line(left_graph, "./distance/data/d-30_c-2_pr-0.2_msr-0.8_effi.tsv", left_color_set, 2, 0);
+	draw_line(left_graph, "./distance/data/d-50_c-2_pr-0.7_msr-0.8_effi.tsv", left_color_set, 3, 0);
+	draw_line(left_graph, "./distance/data/d-50_c-2_pr-0.7_msr-0.3_effi.tsv", left_color_set, 3, 0);
+	draw_line(left_graph, "./distance/data/d-50_c-2_pr-0.2_msr-0.3_effi.tsv", left_color_set, 3, 0);
+	draw_line(left_graph, "./distance/data/d-50_c-2_pr-0.2_msr-0.8_effi.tsv", left_color_set, 3, 0);
 
-      var right_graph = d3.select("#g2c").append("svg").attr("width", 480).attr("height", 350).append("g").attr("transform", "translate(" + margin.left + "," + margin.top + ")");
-      var right_color_set = d3.scale.category10();
-      draw_line(right_graph, "./distance/data/d-10_c-2_pr-0.7_msr-0.8_cost.tsv", right_color_set, 0, 90);
-      draw_line(right_graph, "./distance/data/d-10_c-2_pr-0.7_msr-0.3_cost.tsv", right_color_set, 0, 90);
-      draw_line(right_graph, "./distance/data/d-10_c-2_pr-0.2_msr-0.3_cost.tsv", right_color_set, 0, 90);
-      draw_line(right_graph, "./distance/data/d-10_c-2_pr-0.2_msr-0.8_cost.tsv", right_color_set, 0, 90);
-      draw_line(right_graph, "./distance/data/d-20_c-2_pr-0.7_msr-0.8_cost.tsv", right_color_set, 1, 90);
-      draw_line(right_graph, "./distance/data/d-20_c-2_pr-0.7_msr-0.3_cost.tsv", right_color_set, 1, 90);
-      draw_line(right_graph, "./distance/data/d-20_c-2_pr-0.2_msr-0.3_cost.tsv", right_color_set, 1, 90);
-      draw_line(right_graph, "./distance/data/d-20_c-2_pr-0.2_msr-0.8_cost.tsv", right_color_set, 1, 90);
-      draw_line(right_graph, "./distance/data/d-30_c-2_pr-0.7_msr-0.8_cost.tsv", right_color_set, 2, 90);
-      draw_line(right_graph, "./distance/data/d-30_c-2_pr-0.7_msr-0.3_cost.tsv", right_color_set, 2, 90);
-      draw_line(right_graph, "./distance/data/d-30_c-2_pr-0.2_msr-0.3_cost.tsv", right_color_set, 2, 90);
-      draw_line(right_graph, "./distance/data/d-30_c-2_pr-0.2_msr-0.8_cost.tsv", right_color_set, 2, 90);
-      draw_line(right_graph, "./distance/data/d-50_c-2_pr-0.7_msr-0.8_cost.tsv", right_color_set, 3, 90);
-      draw_line(right_graph, "./distance/data/d-50_c-2_pr-0.7_msr-0.3_cost.tsv", right_color_set, 3, 90);
-      draw_line(right_graph, "./distance/data/d-50_c-2_pr-0.2_msr-0.3_cost.tsv", right_color_set, 3, 90);
-      draw_line(right_graph, "./distance/data/d-50_c-2_pr-0.2_msr-0.8_cost.tsv", right_color_set, 3, 90);
+	left_graph.append("text").text("PR = 0.7,").attr("stroke", "#1F77B4").attr("stroke-width", "1px").attr("x", "170px").attr("y", "85px");
+	left_graph.append("text").text("MS_RATE = 0.8").attr("stroke", "#1F77B4").attr("stroke-width", "1px").attr("x", "170px").attr("y", "100px");
+	left_graph.append("text").text("PR = 0.2,").attr("stroke", "#1F77B4").attr("stroke-width", "1px").attr("x", "130px").attr("y", "165px");
+	left_graph.append("text").text("MS_RATE = 0.8").attr("stroke", "#1F77B4").attr("stroke-width", "1px").attr("x", "130px").attr("y", "180px");
+	left_graph.append("text").text("PR = 0.7,").attr("stroke", "#1F77B4").attr("stroke-width", "1px").attr("x", "310px").attr("y", "125px");
+	left_graph.append("text").text("MS_RATE = 0.3").attr("stroke", "#1F77B4").attr("stroke-width", "1px").attr("x", "310px").attr("y", "140px");
+	left_graph.append("text").text("PR = 0.2,").attr("stroke", "#1F77B4").attr("stroke-width", "1px").attr("x", "270px").attr("y", "205px");
+	left_graph.append("text").text("MS_RATE = 0.3").attr("stroke", "#1F77B4").attr("stroke-width", "1px").attr("x", "270px").attr("y", "220px");
 
-      right_graph.append("text").text("PR = 0.7, MS_RATE = 0.8").attr("stroke", "#D62728").attr("stroke-width", "1px").attr("x", "250px").attr("y", "150px");
-      right_graph.append("text").text("PR = 0.2, MS_RATE = 0.8").attr("stroke", "#D62728").attr("stroke-width", "1px").attr("x", "170px").attr("y", "200px");
-      right_graph.append("text").text("PR = 0.7, MS_RATE = 0.3").attr("stroke", "#D62728").attr("stroke-width", "1px").attr("x", "230px").attr("y", "75px");
-      right_graph.append("text").text("PR = 0.2, MS_RATE = 0.3").attr("stroke", "#D62728").attr("stroke-width", "1px").attr("x", "150px").attr("y", "125px");
+	var right_graph = d3.select("#g2c").append("svg").attr("width", 480).attr("height", 350).append("g").attr("transform", "translate(" + margin.left + "," + margin.top + ")");
+	var right_color_set = d3.scale.category10();
+	draw_line(right_graph, "./distance/data/d-10_c-2_pr-0.7_msr-0.8_cost.tsv", right_color_set, 0, 90);
+	draw_line(right_graph, "./distance/data/d-10_c-2_pr-0.7_msr-0.3_cost.tsv", right_color_set, 0, 90);
+	draw_line(right_graph, "./distance/data/d-10_c-2_pr-0.2_msr-0.3_cost.tsv", right_color_set, 0, 90);
+	draw_line(right_graph, "./distance/data/d-10_c-2_pr-0.2_msr-0.8_cost.tsv", right_color_set, 0, 90);
+	draw_line(right_graph, "./distance/data/d-20_c-2_pr-0.7_msr-0.8_cost.tsv", right_color_set, 1, 90);
+	draw_line(right_graph, "./distance/data/d-20_c-2_pr-0.7_msr-0.3_cost.tsv", right_color_set, 1, 90);
+	draw_line(right_graph, "./distance/data/d-20_c-2_pr-0.2_msr-0.3_cost.tsv", right_color_set, 1, 90);
+	draw_line(right_graph, "./distance/data/d-20_c-2_pr-0.2_msr-0.8_cost.tsv", right_color_set, 1, 90);
+	draw_line(right_graph, "./distance/data/d-30_c-2_pr-0.7_msr-0.8_cost.tsv", right_color_set, 2, 90);
+	draw_line(right_graph, "./distance/data/d-30_c-2_pr-0.7_msr-0.3_cost.tsv", right_color_set, 2, 90);
+	draw_line(right_graph, "./distance/data/d-30_c-2_pr-0.2_msr-0.3_cost.tsv", right_color_set, 2, 90);
+	draw_line(right_graph, "./distance/data/d-30_c-2_pr-0.2_msr-0.8_cost.tsv", right_color_set, 2, 90);
+	draw_line(right_graph, "./distance/data/d-50_c-2_pr-0.7_msr-0.8_cost.tsv", right_color_set, 3, 90);
+	draw_line(right_graph, "./distance/data/d-50_c-2_pr-0.7_msr-0.3_cost.tsv", right_color_set, 3, 90);
+	draw_line(right_graph, "./distance/data/d-50_c-2_pr-0.2_msr-0.3_cost.tsv", right_color_set, 3, 90);
+	draw_line(right_graph, "./distance/data/d-50_c-2_pr-0.2_msr-0.8_cost.tsv", right_color_set, 3, 90);
 
-      var left_graph = d3.select("#g3e").append("svg").attr("width", 480).attr("height",350).append("g").attr("transform", "translate(" + margin.left + "," + margin.top + ")");
-      var left_color_set = d3.scale.category10();
-      draw_line(left_graph, "./distance/data/d-10_c-6_pr-0.7_msr-0.8_effi.tsv", left_color_set, 0, 0);
-      draw_line(left_graph, "./distance/data/d-20_c-6_pr-0.7_msr-0.8_effi.tsv", left_color_set, 1, 0);
-      draw_line(left_graph, "./distance/data/d-30_c-6_pr-0.7_msr-0.8_effi.tsv", left_color_set, 2, 0);
-      draw_line(left_graph, "./distance/data/d-50_c-6_pr-0.7_msr-0.8_effi.tsv", left_color_set, 3, 0);
+	right_graph.append("text").text("PR = 0.7,").attr("stroke", "#D62728").attr("stroke-width", "1px").attr("x", "280px").attr("y", "150px");
+	right_graph.append("text").text("MS_RATE = 0.8").attr("stroke", "#D62728").attr("stroke-width", "1px").attr("x", "280px").attr("y", "165px");
+	right_graph.append("text").text("PR = 0.2,").attr("stroke", "#D62728").attr("stroke-width", "1px").attr("x", "200px").attr("y", "185px");
+	right_graph.append("text").text("MS_RATE = 0.8").attr("stroke", "#D62728").attr("stroke-width", "1px").attr("x", "200px").attr("y", "200px");
+	right_graph.append("text").text("PR = 0.7,").attr("stroke", "#D62728").attr("stroke-width", "1px").attr("x", "235px").attr("y", "75px");
+	right_graph.append("text").text("MS_RATE = 0.3").attr("stroke", "#D62728").attr("stroke-width", "1px").attr("x", "235px").attr("y", "90px");
+	right_graph.append("text").text("PR = 0.2,").attr("stroke", "#D62728").attr("stroke-width", "1px").attr("x", "165px").attr("y", "125px");
+	right_graph.append("text").text("MS_RATE = 0.3").attr("stroke", "#D62728").attr("stroke-width", "1px").attr("x", "165px").attr("y", "140px");
 
-      var right_graph = d3.select("#g3c").append("svg").attr("width", 480).attr("height", 350).append("g").attr("transform", "translate(" + margin.left + "," + margin.top + ")");
-      var right_color_set = d3.scale.category10();
-      draw_line(right_graph, "./distance/data/d-10_c-6_pr-0.7_msr-0.8_cost.tsv", right_color_set, 0, 150);
-      draw_line(right_graph, "./distance/data/d-20_c-6_pr-0.7_msr-0.8_cost.tsv", right_color_set, 1, 150);
-      draw_line(right_graph, "./distance/data/d-30_c-6_pr-0.7_msr-0.8_cost.tsv", right_color_set, 2, 150);
-      draw_line(right_graph, "./distance/data/d-50_c-6_pr-0.7_msr-0.8_cost.tsv", right_color_set, 3, 150);
- 
-      var left_graph = d3.select("#g4e").append("svg").attr("width", 480).attr("height",350).append("g").attr("transform", "translate(" + margin.left + "," + margin.top + ")");
-      var left_color_set = d3.scale.category10();
-      draw_line(left_graph, "./distance/data/d-10_c-6_pr-0.7_msr-0.8_effi.tsv", left_color_set, 0, 0);
-      draw_line(left_graph, "./distance/data/d-10_c-6_pr-0.7_msr-0.3_effi.tsv", left_color_set, 0, 0);
-      draw_line(left_graph, "./distance/data/d-10_c-6_pr-0.2_msr-0.3_effi.tsv", left_color_set, 0, 0);
-      draw_line(left_graph, "./distance/data/d-10_c-6_pr-0.2_msr-0.8_effi.tsv", left_color_set, 0, 0);
-      draw_line(left_graph, "./distance/data/d-20_c-6_pr-0.7_msr-0.8_effi.tsv", left_color_set, 1, 0);
-      draw_line(left_graph, "./distance/data/d-20_c-6_pr-0.7_msr-0.3_effi.tsv", left_color_set, 1, 0);
-      draw_line(left_graph, "./distance/data/d-20_c-6_pr-0.2_msr-0.3_effi.tsv", left_color_set, 1, 0);
-      draw_line(left_graph, "./distance/data/d-20_c-6_pr-0.2_msr-0.8_effi.tsv", left_color_set, 1, 0);
-      draw_line(left_graph, "./distance/data/d-30_c-6_pr-0.7_msr-0.8_effi.tsv", left_color_set, 2, 0);
-      draw_line(left_graph, "./distance/data/d-30_c-6_pr-0.7_msr-0.3_effi.tsv", left_color_set, 2, 0);
-      draw_line(left_graph, "./distance/data/d-30_c-6_pr-0.2_msr-0.3_effi.tsv", left_color_set, 2, 0);
-      draw_line(left_graph, "./distance/data/d-30_c-6_pr-0.2_msr-0.8_effi.tsv", left_color_set, 2, 0);
-      draw_line(left_graph, "./distance/data/d-50_c-6_pr-0.7_msr-0.8_effi.tsv", left_color_set, 3, 0);
-      draw_line(left_graph, "./distance/data/d-50_c-6_pr-0.7_msr-0.3_effi.tsv", left_color_set, 3, 0);
-      draw_line(left_graph, "./distance/data/d-50_c-6_pr-0.2_msr-0.3_effi.tsv", left_color_set, 3, 0);
-      draw_line(left_graph, "./distance/data/d-50_c-6_pr-0.2_msr-0.8_effi.tsv", left_color_set, 3, 0);
+	var left_graph = d3.select("#g3e").append("svg").attr("width", 480).attr("height",350).append("g").attr("transform", "translate(" + margin.left + "," + margin.top + ")");
+	var left_color_set = d3.scale.category10();
+	draw_line(left_graph, "./distance/data/d-10_c-6_pr-0.7_msr-0.8_effi.tsv", left_color_set, 0, 0);
+	draw_line(left_graph, "./distance/data/d-20_c-6_pr-0.7_msr-0.8_effi.tsv", left_color_set, 1, 0);
+	draw_line(left_graph, "./distance/data/d-30_c-6_pr-0.7_msr-0.8_effi.tsv", left_color_set, 2, 0);
+	draw_line(left_graph, "./distance/data/d-50_c-6_pr-0.7_msr-0.8_effi.tsv", left_color_set, 3, 0);
 
-      var right_graph = d3.select("#g4c").append("svg").attr("width", 480).attr("height", 350).append("g").attr("transform", "translate(" + margin.left + "," + margin.top + ")");
-      var right_color_set = d3.scale.category10();
-      draw_line(right_graph, "./distance/data/d-10_c-6_pr-0.7_msr-0.8_cost.tsv", right_color_set, 0, 150);
-      draw_line(right_graph, "./distance/data/d-10_c-6_pr-0.7_msr-0.3_cost.tsv", right_color_set, 0, 150);
-      draw_line(right_graph, "./distance/data/d-10_c-6_pr-0.2_msr-0.3_cost.tsv", right_color_set, 0, 150);
-      draw_line(right_graph, "./distance/data/d-10_c-6_pr-0.2_msr-0.8_cost.tsv", right_color_set, 0, 150);
-      draw_line(right_graph, "./distance/data/d-20_c-6_pr-0.7_msr-0.8_cost.tsv", right_color_set, 1, 150);
-      draw_line(right_graph, "./distance/data/d-20_c-6_pr-0.7_msr-0.3_cost.tsv", right_color_set, 1, 150);
-      draw_line(right_graph, "./distance/data/d-20_c-6_pr-0.2_msr-0.3_cost.tsv", right_color_set, 1, 150);
-      draw_line(right_graph, "./distance/data/d-20_c-6_pr-0.2_msr-0.8_cost.tsv", right_color_set, 1, 150);
-      draw_line(right_graph, "./distance/data/d-30_c-6_pr-0.7_msr-0.8_cost.tsv", right_color_set, 2, 150);
-      draw_line(right_graph, "./distance/data/d-30_c-6_pr-0.7_msr-0.3_cost.tsv", right_color_set, 2, 150);
-      draw_line(right_graph, "./distance/data/d-30_c-6_pr-0.2_msr-0.3_cost.tsv", right_color_set, 2, 150);
-      draw_line(right_graph, "./distance/data/d-30_c-6_pr-0.2_msr-0.8_cost.tsv", right_color_set, 2, 150);
-      draw_line(right_graph, "./distance/data/d-50_c-6_pr-0.7_msr-0.8_cost.tsv", right_color_set, 3, 150);
-      draw_line(right_graph, "./distance/data/d-50_c-6_pr-0.7_msr-0.3_cost.tsv", right_color_set, 3, 150);
-      draw_line(right_graph, "./distance/data/d-50_c-6_pr-0.2_msr-0.3_cost.tsv", right_color_set, 3, 150);
-      draw_line(right_graph, "./distance/data/d-50_c-6_pr-0.2_msr-0.8_cost.tsv", right_color_set, 3, 150);
-    </script>
-  </body>
-</html>
+	var right_graph = d3.select("#g3c").append("svg").attr("width", 480).attr("height", 350).append("g").attr("transform", "translate(" + margin.left + "," + margin.top + ")");
+	var right_color_set = d3.scale.category10();
+	draw_line(right_graph, "./distance/data/d-10_c-6_pr-0.7_msr-0.8_cost.tsv", right_color_set, 0, 150);
+	draw_line(right_graph, "./distance/data/d-20_c-6_pr-0.7_msr-0.8_cost.tsv", right_color_set, 1, 150);
+	draw_line(right_graph, "./distance/data/d-30_c-6_pr-0.7_msr-0.8_cost.tsv", right_color_set, 2, 150);
+	draw_line(right_graph, "./distance/data/d-50_c-6_pr-0.7_msr-0.8_cost.tsv", right_color_set, 3, 150);
+
+	var left_graph = d3.select("#g4e").append("svg").attr("width", 480).attr("height",350).append("g").attr("transform", "translate(" + margin.left + "," + margin.top + ")");
+	var left_color_set = d3.scale.category10();
+	draw_line(left_graph, "./distance/data/d-10_c-6_pr-0.7_msr-0.8_effi.tsv", left_color_set, 0, 0);
+	draw_line(left_graph, "./distance/data/d-10_c-6_pr-0.7_msr-0.3_effi.tsv", left_color_set, 0, 0);
+	draw_line(left_graph, "./distance/data/d-10_c-6_pr-0.2_msr-0.3_effi.tsv", left_color_set, 0, 0);
+	draw_line(left_graph, "./distance/data/d-10_c-6_pr-0.2_msr-0.8_effi.tsv", left_color_set, 0, 0);
+	draw_line(left_graph, "./distance/data/d-20_c-6_pr-0.7_msr-0.8_effi.tsv", left_color_set, 1, 0);
+	draw_line(left_graph, "./distance/data/d-20_c-6_pr-0.7_msr-0.3_effi.tsv", left_color_set, 1, 0);
+	draw_line(left_graph, "./distance/data/d-20_c-6_pr-0.2_msr-0.3_effi.tsv", left_color_set, 1, 0);
+	draw_line(left_graph, "./distance/data/d-20_c-6_pr-0.2_msr-0.8_effi.tsv", left_color_set, 1, 0);
+	draw_line(left_graph, "./distance/data/d-30_c-6_pr-0.7_msr-0.8_effi.tsv", left_color_set, 2, 0);
+	draw_line(left_graph, "./distance/data/d-30_c-6_pr-0.7_msr-0.3_effi.tsv", left_color_set, 2, 0);
+	draw_line(left_graph, "./distance/data/d-30_c-6_pr-0.2_msr-0.3_effi.tsv", left_color_set, 2, 0);
+	draw_line(left_graph, "./distance/data/d-30_c-6_pr-0.2_msr-0.8_effi.tsv", left_color_set, 2, 0);
+	draw_line(left_graph, "./distance/data/d-50_c-6_pr-0.7_msr-0.8_effi.tsv", left_color_set, 3, 0);
+	draw_line(left_graph, "./distance/data/d-50_c-6_pr-0.7_msr-0.3_effi.tsv", left_color_set, 3, 0);
+	draw_line(left_graph, "./distance/data/d-50_c-6_pr-0.2_msr-0.3_effi.tsv", left_color_set, 3, 0);
+	draw_line(left_graph, "./distance/data/d-50_c-6_pr-0.2_msr-0.8_effi.tsv", left_color_set, 3, 0);
+
+	var right_graph = d3.select("#g4c").append("svg").attr("width", 480).attr("height", 350).append("g").attr("transform", "translate(" + margin.left + "," + margin.top + ")");
+	var right_color_set = d3.scale.category10();
+	draw_line(right_graph, "./distance/data/d-10_c-6_pr-0.7_msr-0.8_cost.tsv", right_color_set, 0, 150);
+	draw_line(right_graph, "./distance/data/d-10_c-6_pr-0.7_msr-0.3_cost.tsv", right_color_set, 0, 150);
+	draw_line(right_graph, "./distance/data/d-10_c-6_pr-0.2_msr-0.3_cost.tsv", right_color_set, 0, 150);
+	draw_line(right_graph, "./distance/data/d-10_c-6_pr-0.2_msr-0.8_cost.tsv", right_color_set, 0, 150);
+	draw_line(right_graph, "./distance/data/d-20_c-6_pr-0.7_msr-0.8_cost.tsv", right_color_set, 1, 150);
+	draw_line(right_graph, "./distance/data/d-20_c-6_pr-0.7_msr-0.3_cost.tsv", right_color_set, 1, 150);
+	draw_line(right_graph, "./distance/data/d-20_c-6_pr-0.2_msr-0.3_cost.tsv", right_color_set, 1, 150);
+	draw_line(right_graph, "./distance/data/d-20_c-6_pr-0.2_msr-0.8_cost.tsv", right_color_set, 1, 150);
+	draw_line(right_graph, "./distance/data/d-30_c-6_pr-0.7_msr-0.8_cost.tsv", right_color_set, 2, 150);
+	draw_line(right_graph, "./distance/data/d-30_c-6_pr-0.7_msr-0.3_cost.tsv", right_color_set, 2, 150);
+	draw_line(right_graph, "./distance/data/d-30_c-6_pr-0.2_msr-0.3_cost.tsv", right_color_set, 2, 150);
+	draw_line(right_graph, "./distance/data/d-30_c-6_pr-0.2_msr-0.8_cost.tsv", right_color_set, 2, 150);
+	draw_line(right_graph, "./distance/data/d-50_c-6_pr-0.7_msr-0.8_cost.tsv", right_color_set, 3, 150);
+	draw_line(right_graph, "./distance/data/d-50_c-6_pr-0.7_msr-0.3_cost.tsv", right_color_set, 3, 150);
+	draw_line(right_graph, "./distance/data/d-50_c-6_pr-0.2_msr-0.3_cost.tsv", right_color_set, 3, 150);
+	draw_line(right_graph, "./distance/data/d-50_c-6_pr-0.2_msr-0.8_cost.tsv", right_color_set, 3, 150);
+      </script>
+    </body>
+  </html>
