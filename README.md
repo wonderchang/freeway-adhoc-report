@@ -1,6 +1,6 @@
 #Freeway-Ad-Hoc
 
-Report: [http://wonderbee.no-if.biz/freeway-ad-hoc](http://wonderbee.no-if.biz/freeway-ad-hoc)
+Report: [http://wonderbee.no-ip.biz/freeway-ad-hoc](http://wonderbee.no-ip.biz/freeway-ad-hoc)
 
 #How to use
 
