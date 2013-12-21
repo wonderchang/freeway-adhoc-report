@@ -112,15 +112,18 @@ else {
 function pass_packet(car) {
 
   //Data declaration
-  var received = [];
+  var receiver = [];
+  var receiver_num;
 
   //Push the reachable car id
   for(var i = 0; i < car.reachable.length; i++) {
-    received.push(car.reachable[i]);
+    receiver.push(car.reachable[i]);
   }
 
+  receiver_num = receiver.length;
+
   //Start boradcasting
-  while(car.counter < COUNTER && received != null) {
+  while(car.counter < COUNTER && receiver_num != 0) {
 
     //Dice PR
     if(Math.random() <= PR) {
@@ -129,7 +132,7 @@ function pass_packet(car) {
       car.counter++;
 
       //Send the package to the reachable car nodes one by one
-      received.forEach(function(other_car) {
+      receiver.forEach(function(other_car) {
 	if(other_car != null) {
 
 	  //Record the packet cost for it
@@ -142,8 +145,9 @@ function pass_packet(car) {
 	    freeway[other_car].received = 1;
 
 	    //Clean the received car out of the reachable array list
-	    var index = received.indexOf(other_car);
-	    received[index] = null;
+	    var index = receiver.indexOf(other_car);
+	    receiver[index] = null;
+	    receiver_num -= 1;
 
 	    //Go through passing next car
 	    pass_packet(freeway[other_car]);

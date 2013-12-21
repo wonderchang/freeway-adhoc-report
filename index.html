@@ -6,7 +6,7 @@
     <link rel="stylesheet" href="./style.css" />
   </head>
   <body>
-    <div class="page" style="height: 4000px;">
+    <div class="page" style="height: 8000px;">
 
       <header class="text-center">
 	<h1>高速公路車載網路之<br />封包傳遞效能成本模擬分析</h1>
@@ -98,8 +98,34 @@
       </section>
 
       <section>
-	<h2>模擬程式說明</h2>
-	<h3 class="layer1">1. 資料定義</h3>
+	<h2>程式說明</h2>
+	<p>
+	  &nbsp;&nbsp;&nbsp;&nbsp;
+	  所有程式與相關結果開放在<a href="https://github.com/wonderchang/freeway-ad-hoc">Github<img src="github.gif" height="25" align="top" /></a>。
+	</p>
+	<h3 class="layer1">1. 參數設定</h3>
+	<p class="layer2">
+	  &nbsp;&nbsp;&nbsp;&nbsp;
+	  依據四個影響傳遞效能與成本的控制變因，可傳距離 （DISTANCE）、最多重傳次數（COUNTER）、
+	  傳送成功率（PR, Retransmission probability）、接收成功率 （MS_RATE, Message successful rate），
+	  將其作為程式執行的輸入參數。
+	</p>
+	<h3 class="layer2">
+	  <div class="code_region">
+	    <code>
+	      DISTANCE = 50;<br />
+	      COUNTER = 2;<br />
+	      PR = 0.7;<br />
+	      MS_RATE = 0.8;
+	    </code>
+	  </div>
+	</h3>
+	<br />
+	<h3 class="layer1">2. 資料定義</h3>
+	<p class="layer2">
+	  &nbsp;&nbsp;&nbsp;&nbsp;
+	  整條高速公路有多少輛汽車, 以上述程式碼為例有100輛車在高速公路上。
+	</p>
 	<h3 class="layer2">
 	  <div class="code_region">
 	    <code>
@@ -107,9 +133,20 @@
 	    </code>
 	  </div>
 	</h3>
-	<p class="layer3">
+	<p class="layer2">
 	  &nbsp;&nbsp;&nbsp;&nbsp;
-	  整條高速公路有多少輛汽車, 以上述程式碼為例有100輛車在高速公路上。
+	  將每部車以物件形態顯示其資料，每輛車有三個屬性，
+	  「id」是車的編號標示每輛車;
+	  「x」是其座落的位置，單位為公尺;
+	  「counter」表示該車輛已傳送過幾次封包;
+	  「received」表是否曾收到過封包，1代表有，0代表無;
+	  「packet_num」表示該車輛已收到幾個封包;
+	  「reachable」是可傳送距離之車輛節點之列表，以陣列形式記錄。
+	  以上程式碼為例，該車的編號為3，其坐落在距離模擬之起始位置的144.78公尺處，
+	  供廣播了兩次封包給其他節點，
+	  當然能傳給其他人代表曾收到過該封包過，
+	  而其收到的封包數目為2個，
+	  而其在假設某一可重送距離之下，能與車號為4、5、6、7傳送封包進行溝通。
 	</p>
 	<h3 class="layer2">
 	  <div class="code_region">
@@ -125,20 +162,11 @@
 	    </code>
 	  </div>
 	</h3>
-	<p class="layer3">
+	<p class="layer2">
 	  &nbsp;&nbsp;&nbsp;&nbsp;
-	  將每部車以物件形態顯示其資料，每輛車有三個屬性，
-	  「id」是車的編號標示每輛車;
-	  「x」是其座落的位置，單位為公尺;
-	  「counter」表示該車輛已傳送過幾次封包;
-	  「received」表是否曾收到過封包，1代表有，0代表無;
-	  「packet_num」表示該車輛已收到幾個封包;
-	  「recahable」是可傳送距離之車輛節點之列表，以陣列形式記錄。
-	  以上程式碼為例，該車的編號為3，其坐落在距離模擬之起始位置的144.78公尺處，
-	  供廣播了兩次封包給其他節點，
-	  當然能傳給其他人代表曾收到過該封包過，
-	  而其收到的封包數目為2個，
-	  而其在假設某一可重送距離之下，能與車號為4、5、6、7傳送封包進行溝通。
+	  整條高速公路長1公里，起始點為0，終點為1000公尺，並以陣列資料形態顯示，
+	  裡頭的資料便是每輛車，這些車再整條高速公路的位置隨編號照順序排列，
+	  編號小的坐落位置在編好大的前面。
 	</p>
 	<h3 class="layer2">
 	  <div class="code_region">
@@ -147,21 +175,211 @@
 	    </code>
 	  </div>
 	</h3>
-	<p class="layer3">
-	  &nbsp;&nbsp;&nbsp;&nbsp;
-	  整條高速公路長1公里，起始點為0，終點為1000公尺，並以陣列資料形態顯示，
-	  裡頭的資料便是每輛車，這些車再整條高速公路的位置隨編號照順序排列，
-	  編號小的坐落位置在編好大的前面。
-	</p>
-	<h3 class="layer1">2. 邏輯與流程</h3>
+	<br />
+	<h3 class="layer1">3. 邏輯與流程</h3>
 	<p class="layer2">
 	  &nbsp;&nbsp;&nbsp;&nbsp;
+	  定義函式pass_packet(car)，其傳入的參數為車輛物件，而因為每輛車皆能知道其可傳送的車輛節點資訊，
+	  因此便可以用recursive的方式持續傳遞下去。
 	</p>
+	<h3 class="layer2">
+	  <div class="code_region">
+	    <code>
+	      pass_packet(car);
+	    </code>
+	  </div>
+	</h3>
+	<p class="layer2">
+	  &nbsp;&nbsp;&nbsp;&nbsp;
+	  進入到函式後，receiver記錄該傳入車的物件可以傳送的節點陣列，receiver_num記錄有多少個可傳節點。
+	</p>
+	<h3 class="layer2">
+	  <div class="code_region">
+	    <code>
+	      receiver = car.reachable;<br />
+	      receiver_num = receiver.length;
+	    </code>
+	  </div>
+	</h3>
+	<p class="layer2">
+	  &nbsp;&nbsp;&nbsp;&nbsp;
+	  接著開始進入重送回圈，決定是否重送根據該節點車輛是否已經超過了重傳得最多次數，還有是否在可傳距離內的依然有可被允許傳送的節點，
+	  意思是說receiver陣列是否為空，為空的可能有兩個情況，一個是原本就沒有可傳送的點，另一個是可以傳送的節點都已傳完。
+	   
+	</p>
+	<h3 class="layer2">
+	  <div class="code_region">
+	    <code>
+	      while(car.counter < COUNTER && receiver_num != 0) {<br />
+	      <span class="tab">//Try to reboardcast</span><br />
+	      }
+	    </code>
+	  </div>
+	</h3>
+	<p class="layer2">
+	  &nbsp;&nbsp;&nbsp;&nbsp;
+	  若符合重送情況，以直骰子的方式取隨機來決定是否傳送成功，當所取的亂數小於等於所定的傳送成功率，則代表傳送成功，而反之大於則不傳送。
+	</p>
+	<h3 class="layer2">
+	  <div class="code_region">
+	    <code>
+	      if(Math.random() <= PR) {<br />
+	      <span class="tab">//Allow to boardcast</span><br />
+	      }
+	    </code>
+	  </div>
+	</h3>
+	<p class="layer3">
+	  &nbsp;&nbsp;&nbsp;&nbsp;
+	  當成功後，對所有的節點車輛開始傳送，forEach是針對receiver的所有陣列按順序取出，並回傳在other_car的變數之中。
+	</p>
+	<h3 class="layer2">
+	  <div class="code_region">
+	    <code>
+	      receiver.forEach(function(other_car) {<br />
+	      <span class="tab"></span>//Send the packet to the specific car<br />
+	      });
+	    </code>
+	  </div>
+	</h3>
+	<p class="layer2">
+	  &nbsp;&nbsp;&nbsp;&nbsp;
+	  並在針對每一個個別節點車輛隻傳送取亂數決定是否接收成功，同理根據所輸入的接收成功率 （MS_RATE），小於等於則成功，大於則失敗。
+	  因已確定收到封包，因此再接續以該接收節點變成傳送節點傳送封包下去。
+	</p>
+	<h3 class="layer2">
+	  <div class="code_region">
+	    <code>
+	      if(Math.random() <= MS_RATE) {<br />
+	      <span class="tab">//The receiver get the packet successfully</span><br />
+	      <span class="tab">//Pass to next car</span><br />
+	      <span class="tab">pass_packet(next_car);</span><br />
+	      }
+	    </code>
+	  </div>
+	</h3>
+	<br />
+	<h3 class="layer1">4. 執行環境 </h3>
+	<p class="layer2">
+	  &nbsp;&nbsp;&nbsp;&nbsp;
+	  本程式使用Javascript所編寫，透過google chrome之V8直譯引擎與<a href="http://nodejs.org">nodejs</a>相關模組所執行，檔名為main.js，
+	  輸入以下指令於命令列，四個參數順序如下：
+	</p>
+	<h3 class="layer2">
+	  <div class="code_region">
+	    <code>
+	      $ node main.js [DISTANCE] [COUNTER] [PR] [MS_RATE]
+	    </code>
+	  </div>
+	</h3>
+	<p class="layer2"> 例如：</p>
+	<h3 class="layer2">
+	  <div class="code_region">
+	    <code>
+	      $ node main.js 50 2 0.7 0.8
+	    </code>
+	  </div>
+	</h3>
+	<br />
+	<h3 class="layer1">5. 輸出資料 </h3>
+	<p class="layer2">
+	  &nbsp;&nbsp;&nbsp;&nbsp;
+	  每一次執行產生兩個資料輸出檔案，針對同個參數情況下，一個為車輛數目與效能的變化，另一個是車輛數目與成本的變化，格式為tsv
+	  以上述為例，講產生以下兩個資料輸出檔：
+	</p>
+	<span class="layer2">d-50_c-2_pr-07_ms-08_effi.tsv</span>
+	<h3 class="layer2">
+	  <div class="code_region">
+	    <code>
+	      num<span class="tab"> rate</span><br />
+	      10 &nbsp;<span class="tab">0.0493</span><br />
+	      50 &nbsp;<span class="tab">0.1921</span><br />
+	      100 <span class="tab">0.695</span><br />
+	      150 <span class="tab">0.9611</span><br />
+	      200 <span class="tab">0.9988</span><br />
+	      250 <span class="tab">0.9998</span><br />
+	      300 <span class="tab">0.9998</span><br />
+	      350 <span class="tab">0.9998</span><br />
+	      400 <span class="tab">0.9998</span><br />
+	      450 <span class="tab">0.9999</span><br />
+	      500 <span class="tab">0.9999</span><br />
+	      550 <span class="tab">0.9998</span><br />
+	      600 <span class="tab">0.9999</span><br />
+	      650 <span class="tab">0.9999</span><br />
+	      700 <span class="tab">0.9999</span><br />
+	      750 <span class="tab">0.9999</span><br />
+	      800 <span class="tab">0.9999</span><br />
+	      850 <span class="tab">0.9999</span><br />
+	      900 <span class="tab">0.9999</span><br />
+	      950 <span class="tab">0.9999</span><br />
+	      1000<span class="tab">0.9999</span><br />
+	    </code>
+	  </div>
+	</h3>
+	<span class="layer2">d-50_c-2_pr-07_ms-08_effi.tsv</span>
+	<h3 class="layer2">
+	  <div class="code_region">
+	    <code>
+	      num<span class="tab"> rate</span><br />
+	      10 &nbsp;<span class="tab">0.4323</span><br />
+	      50 &nbsp;<span class="tab">3.0895</span><br />
+	      100 <span class="tab">7.0249</span><br />
+	      150 <span class="tab">10.0912</span><br />
+	      200 <span class="tab">12.7916</span><br />
+	      250 <span class="tab">15.4464</span><br />
+	      300 <span class="tab">18.1571</span><br />
+	      350 <span class="tab">20.9131</span><br />
+	      400 <span class="tab">23.7559</span><br />
+	      450 <span class="tab">26.5568</span><br />
+	      500 <span class="tab">29.4072</span><br />
+	      550 <span class="tab">32.3042</span><br />
+	      600 <span class="tab">35.1873</span><br />
+	      650 <span class="tab">38.077</span><br />
+	      700 <span class="tab">41.0007</span><br />
+	      750 <span class="tab">43.851</span><br />
+	      800 <span class="tab">46.8179</span><br />
+	      850 <span class="tab">49.7613</span><br />
+	      900 <span class="tab">52.7002</span><br />
+	      950 <span class="tab">55.5953</span><br />
+	      1000<span class="tab">58.4596</span>
+	    </code>
+	  </div>
+	</h3>
+	<br />
+      </section>
+      <section>
+	<h2>模擬成果</h2>
+	<p>根據四個控制因素，我們可以簡單控制一些參數來觀察彼此之間的影響</p>
+	<div class="graph">
+	  <div class="left-graph"></div>
+	  <div class="right-graph"></div>
+	  <div class="left-graph-label">Figure 1, 效能比率</div>
+	  <div class="right-graph-label">Figure 2, 傳送成本比率</div>
+	</div>
       </section>
 
 
-    </div>
     <script src="http://d3js.org/d3.v3.js"></script>
     <script src="./dynamic-car-flow/app.js"></script>
+    <script src="./app.js"></script>
+    <script>
+
+      var left_graph = d3.select(".left-graph").append("svg").attr("width", 480).attr("height",350).append("g").attr("transform", "translate(" + margin.left + "," + margin.top + ")");
+      var left_color_set = d3.scale.category10();
+      var left_color_counter = 0;
+      draw_line(left_graph, "./distance/data/d-10_c-2_msr-0.8_pr-0.7_effi.tsv", left_color_set, left_color_counter++, 0);
+      draw_line(left_graph, "./distance/data/d-25_c-2_msr-0.8_pr-0.7_effi.tsv", left_color_set, left_color_counter++, 0);
+      draw_line(left_graph, "./distance/data/d-50_c-2_msr-0.8_pr-0.7_effi.tsv", left_color_set, left_color_counter++, 0);
+      draw_line(left_graph, "./distance/data/d-70_c-2_msr-0.8_pr-0.7_effi.tsv", left_color_set, left_color_counter++, 0);
+
+      var right_graph = d3.select(".right-graph").append("svg").attr("width", 480).attr("height", 350).append("g").attr("transform", "translate(" + margin.left + "," + margin.top + ")");
+      var right_color_set = d3.scale.category10();
+      var right_color_counter = 0;
+      draw_line(right_graph, "./distance/data/d-10_c-2_msr-0.8_pr-0.7_cost.tsv", right_color_set, right_color_counter++, 80);
+      draw_line(right_graph, "./distance/data/d-25_c-2_msr-0.8_pr-0.7_cost.tsv", right_color_set, right_color_counter++, 80);
+      draw_line(right_graph, "./distance/data/d-50_c-2_msr-0.8_pr-0.7_cost.tsv", right_color_set, right_color_counter++, 80);
+      draw_line(right_graph, "./distance/data/d-70_c-2_msr-0.8_pr-0.7_cost.tsv", right_color_set, right_color_counter++, 80);
+ 
+    </script>
   </body>
 </html>

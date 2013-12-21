@@ -11,11 +11,13 @@ var yAxis = d3.svg.axis().scale(y).orient("left");
 
 var line = d3.svg.line().x(function(d) { return x(d.num); }).y(function(d) { return y(d.rate); });
 
+/*
 var svg = d3.select("body").append("svg")
 .attr("width", width + margin.left + margin.right)
 .attr("height", height + margin.top + margin.bottom)
 .append("g")
 .attr("transform", "translate(" + margin.left + "," + margin.top + ")");
+*/
 
 
 function draw_line(node, filename, color, color_index, label) {
