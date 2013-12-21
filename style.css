@@ -11,9 +11,18 @@ h2 {
   font-size: 28px;
 }
 
+h3 {
+  padding: 0px 10px;
+}
+
 p {
+  padding: 0px 5px;
   line-height: 28px;
   font-size: 18px;
+}
+
+.num-p {
+  padding: 0px 20px;
 }
 
 section {
