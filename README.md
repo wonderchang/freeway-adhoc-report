@@ -2,6 +2,10 @@
 
 NCKUEE, Computer Communication Network, homework #4.
 
+Teacher: 蘇淑茵
+
+Student: EE103A E24990019 張遠哲
+
 Report See: [http://wonderbee.no-ip.biz/freeway-ad-hoc](http://wonderbee.no-ip.biz/freeway-ad-hoc)
 
 #Source Listing
@@ -31,5 +35,3 @@ Open the command line. Type
 
 The after four inputting arguments are required. All the detail and the arugment meanings see the website report.
 
-
-EE103A E24990019 張遠哲
