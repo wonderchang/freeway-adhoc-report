@@ -13,9 +13,22 @@ Report See: [http://wonderbee.no-ip.biz/freeway-ad-hoc](http://wonderbee.no-ip.b
 You can see the directory "app" that contains the source code for simulation.
 
 	app/
-		main.js: the main program
-		data/: the directory that collect the output file from the main.js
-		run.sh: shell script file, help to run different inputing parameter by one command
+		main.js	//the main program
+		data/	//the directory that collect the output file from the main.js
+		run.sh: //shell script file, help to run different inputing parameter by one command
+
+Other sources are the code used to build the report website.
+
+	index.html		//The page of the report website
+
+	css/
+		style.css	//Stylesheet
+	js/
+		chart.js	//Chart drawing
+		animate.js	//Freeway animation
+	img/
+		github.gif	//Some icon
+
 #How to use
 
 This program is written by Javascript. 
