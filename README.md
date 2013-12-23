@@ -15,7 +15,7 @@ You can see the directory "app" that contains the source code for simulation.
 	app/
 		main.js	//the main program
 		data/	//the directory that collect the output file from the main.js
-		run.sh: //shell script file, help to run different inputing parameter by one command
+		run.sh: //shell script file, help to run different inputting parameter via one command
 
 Other sources are the code used to build the report website.
 
