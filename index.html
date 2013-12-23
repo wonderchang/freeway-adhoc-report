@@ -6,7 +6,7 @@
     <link rel="stylesheet" href="./css/style.css" />
   </head>
   <body>
-    <div class="page" style="height: 9940px;">
+    <div class="page">
 
       <header class="text-center">
 	<h1>高速公路車載網路之<br />封包傳遞效能成本模擬分析</h1>
@@ -368,14 +368,17 @@
 	<h2>模擬成果</h2>
 	<p>
 	  根據四個控制因素，我們可以簡單控制一些參數來觀察彼此之間的影響，由於可傳送之距離視為最基本的通訊限制條件，
-	  因此在各項比較當中都會有不同的距離值來對應，共選取四個值，分別是：<br />
+	  因此在各項比較當中都會有不同的距離值來對應，共選取四個值（其顏色顯示便是下面圖表所對應之顏色），分別是：<br />
 	  <span class="layer1" style="font-weight: bold; margin:10px 0px; display: block;">DISTANCE = 
 	    <span style="color: #1F77B4;">10 m</span>,	  
 	    <span style="color: #FF7f0E;">20 m</span>,	  
 	    <span style="color: #2CA02C;">30 m</span>,	  
 	    <span style="color: #D62728;">50 m</span>
 	  </span>
-	  其顏色顯示便是下面圖表所對應之顏色。
+	</p>
+	<p>
+	  其顏色顯示便是下面圖表所對應之顏色，而其他參數則分別設定一個高值和低值來做模擬比較，
+	  COUNTER為可允許之重傳次數，PR為傳送成功率，MS_RATE為接收成功率，所輸入的數值如下表格：
 	</p>
 	<table>
 	  <tr>
@@ -495,127 +498,185 @@
     <script src="./js/chart.js"></script>
     <script>
 
-      var left_graph = d3.select("#g1e").append("svg").attr("width", 480).attr("height",350).append("g").attr("transform", "translate(" + margin.left + "," + margin.top + ")");
-      var left_color_set = d3.scale.category10();
-      draw_line(left_graph, "./app/data/d-10_c-2_pr-0.7_msr-0.8_effi.tsv", left_color_set, 0, 0);
-      draw_line(left_graph, "./app/data/d-20_c-2_pr-0.7_msr-0.8_effi.tsv", left_color_set, 1, 0);
-      draw_line(left_graph, "./app/data/d-30_c-2_pr-0.7_msr-0.8_effi.tsv", left_color_set, 2, 0);
-      draw_line(left_graph, "./app/data/d-50_c-2_pr-0.7_msr-0.8_effi.tsv", left_color_set, 3, 0);
+      var left_graph_1 = d3.select("#g1e").append("svg").attr("width", 480).attr("height",350).append("g").attr("transform", "translate(" + margin.left + "," + margin.top + ")");
+      var left_color_set_1 = d3.scale.category10();
+      draw_line(left_graph_1, "./app/data/d-10_c-2_pr-0.7_msr-0.8_effi.tsv", left_color_set_1, 0, 0);
+      draw_line(left_graph_1, "./app/data/d-20_c-2_pr-0.7_msr-0.8_effi.tsv", left_color_set_1, 1, 0);
+      draw_line(left_graph_1, "./app/data/d-30_c-2_pr-0.7_msr-0.8_effi.tsv", left_color_set_1, 2, 0);
+      draw_line(left_graph_1, "./app/data/d-50_c-2_pr-0.7_msr-0.8_effi.tsv", left_color_set_1, 3, 0);
 
-      var right_graph = d3.select("#g1c").append("svg").attr("width", 480).attr("height", 350).append("g").attr("transform", "translate(" + margin.left + "," + margin.top + ")");
-      var right_color_set = d3.scale.category10();
-      draw_line(right_graph, "./app/data/d-10_c-2_pr-0.7_msr-0.8_cost.tsv", right_color_set, 0, 65);
-      draw_line(right_graph, "./app/data/d-20_c-2_pr-0.7_msr-0.8_cost.tsv", right_color_set, 1, 65);
-      draw_line(right_graph, "./app/data/d-30_c-2_pr-0.7_msr-0.8_cost.tsv", right_color_set, 2, 65);
-      draw_line(right_graph, "./app/data/d-50_c-2_pr-0.7_msr-0.8_cost.tsv", right_color_set, 3, 65);
+      left_graph_1.append("text").text("10 m").attr("stroke", "#1F77B4").attr("x", 260).attr("y", 100);
+      left_graph_1.append("text").text("20 m").attr("stroke", "#FF7f0E").attr("x", 100).attr("y", 45);
+      left_graph_1.append("text").text("30 m").attr("stroke", "#2CA02C").attr("x", 60).attr("y", 30);
+      left_graph_1.append("text").text("50 m").attr("stroke", "#D62728").attr("x", 25).attr("y", 20);
+      left_graph_1.append("text").text("COUNTER = 2").attr("stroke", "#222").attr("x", 280).attr("y", 200);
+      left_graph_1.append("text").text("Pr = 0.7").attr("stroke", "#222").attr("x", 280).attr("y", 215);
+      left_graph_1.append("text").text("MS_RATE = 0.8").attr("stroke", "#222").attr("x", 280).attr("y", 230);
 
-      var left_graph = d3.select("#g2e").append("svg").attr("width", 480).attr("height",350).append("g").attr("transform", "translate(" + margin.left + "," + margin.top + ")");
-      var left_color_set = d3.scale.category10();
-      draw_line(left_graph, "./app/data/d-10_c-2_pr-0.7_msr-0.8_effi.tsv", left_color_set, 0, 0);
-      draw_line(left_graph, "./app/data/d-10_c-2_pr-0.7_msr-0.3_effi.tsv", left_color_set, 0, 0);
-      draw_line(left_graph, "./app/data/d-10_c-2_pr-0.2_msr-0.3_effi.tsv", left_color_set, 0, 0);
-      draw_line(left_graph, "./app/data/d-10_c-2_pr-0.2_msr-0.8_effi.tsv", left_color_set, 0, 0);
-      draw_line(left_graph, "./app/data/d-20_c-2_pr-0.7_msr-0.8_effi.tsv", left_color_set, 1, 0);
-      draw_line(left_graph, "./app/data/d-20_c-2_pr-0.7_msr-0.3_effi.tsv", left_color_set, 1, 0);
-      draw_line(left_graph, "./app/data/d-20_c-2_pr-0.2_msr-0.3_effi.tsv", left_color_set, 1, 0);
-      draw_line(left_graph, "./app/data/d-20_c-2_pr-0.2_msr-0.8_effi.tsv", left_color_set, 1, 0);
-      draw_line(left_graph, "./app/data/d-30_c-2_pr-0.7_msr-0.8_effi.tsv", left_color_set, 2, 0);
-      draw_line(left_graph, "./app/data/d-30_c-2_pr-0.7_msr-0.3_effi.tsv", left_color_set, 2, 0);
-      draw_line(left_graph, "./app/data/d-30_c-2_pr-0.2_msr-0.3_effi.tsv", left_color_set, 2, 0);
-      draw_line(left_graph, "./app/data/d-30_c-2_pr-0.2_msr-0.8_effi.tsv", left_color_set, 2, 0);
-      draw_line(left_graph, "./app/data/d-50_c-2_pr-0.7_msr-0.8_effi.tsv", left_color_set, 3, 0);
-      draw_line(left_graph, "./app/data/d-50_c-2_pr-0.7_msr-0.3_effi.tsv", left_color_set, 3, 0);
-      draw_line(left_graph, "./app/data/d-50_c-2_pr-0.2_msr-0.3_effi.tsv", left_color_set, 3, 0);
-      draw_line(left_graph, "./app/data/d-50_c-2_pr-0.2_msr-0.8_effi.tsv", left_color_set, 3, 0);
+      var right_graph_1 = d3.select("#g1c").append("svg").attr("width", 480).attr("height", 350).append("g").attr("transform", "translate(" + margin.left + "," + margin.top + ")");
+      var right_color_set_1 = d3.scale.category10();
+      draw_line(right_graph_1, "./app/data/d-10_c-2_pr-0.7_msr-0.8_cost.tsv", right_color_set_1, 0, 65);
+      draw_line(right_graph_1, "./app/data/d-20_c-2_pr-0.7_msr-0.8_cost.tsv", right_color_set_1, 1, 65);
+      draw_line(right_graph_1, "./app/data/d-30_c-2_pr-0.7_msr-0.8_cost.tsv", right_color_set_1, 2, 65);
+      draw_line(right_graph_1, "./app/data/d-50_c-2_pr-0.7_msr-0.8_cost.tsv", right_color_set_1, 3, 65);
 
-      left_graph.append("text").text("PR = 0.7,").attr("stroke", "#1F77B4").attr("stroke-width", "1px").attr("x", "170px").attr("y", "85px");
-      left_graph.append("text").text("MS_RATE = 0.8").attr("stroke", "#1F77B4").attr("stroke-width", "1px").attr("x", "170px").attr("y", "100px");
-      left_graph.append("text").text("PR = 0.2,").attr("stroke", "#1F77B4").attr("stroke-width", "1px").attr("x", "130px").attr("y", "165px");
-      left_graph.append("text").text("MS_RATE = 0.8").attr("stroke", "#1F77B4").attr("stroke-width", "1px").attr("x", "130px").attr("y", "180px");
-      left_graph.append("text").text("PR = 0.7,").attr("stroke", "#1F77B4").attr("stroke-width", "1px").attr("x", "310px").attr("y", "125px");
-      left_graph.append("text").text("MS_RATE = 0.3").attr("stroke", "#1F77B4").attr("stroke-width", "1px").attr("x", "310px").attr("y", "140px");
-      left_graph.append("text").text("PR = 0.2,").attr("stroke", "#1F77B4").attr("stroke-width", "1px").attr("x", "270px").attr("y", "205px");
-      left_graph.append("text").text("MS_RATE = 0.3").attr("stroke", "#1F77B4").attr("stroke-width", "1px").attr("x", "270px").attr("y", "220px");
+      right_graph_1.append("text").text("10 m").attr("stroke", "#1F77B4").attr("x", 260).attr("y", 250);
+      right_graph_1.append("text").text("20 m").attr("stroke", "#FF7f0E").attr("x", 260).attr("y", 210);
+      right_graph_1.append("text").text("30 m").attr("stroke", "#2CA02C").attr("x", 260).attr("y", 170);
+      right_graph_1.append("text").text("50 m").attr("stroke", "#D62728").attr("x", 260).attr("y", 90);
+      right_graph_1.append("text").text("COUNTER = 2").attr("stroke", "#222").attr("x", 60).attr("y", 30);
+      right_graph_1.append("text").text("Pr = 0.7").attr("stroke", "#222").attr("x", 60).attr("y", 45);
+      right_graph_1.append("text").text("MS_RATE = 0.8").attr("stroke", "#222").attr("x", 60).attr("y", 60);
 
-      var right_graph = d3.select("#g2c").append("svg").attr("width", 480).attr("height", 350).append("g").attr("transform", "translate(" + margin.left + "," + margin.top + ")");
-      var right_color_set = d3.scale.category10();
-      draw_line(right_graph, "./app/data/d-10_c-2_pr-0.7_msr-0.8_cost.tsv", right_color_set, 0, 90);
-      draw_line(right_graph, "./app/data/d-10_c-2_pr-0.7_msr-0.3_cost.tsv", right_color_set, 0, 90);
-      draw_line(right_graph, "./app/data/d-10_c-2_pr-0.2_msr-0.3_cost.tsv", right_color_set, 0, 90);
-      draw_line(right_graph, "./app/data/d-10_c-2_pr-0.2_msr-0.8_cost.tsv", right_color_set, 0, 90);
-      draw_line(right_graph, "./app/data/d-20_c-2_pr-0.7_msr-0.8_cost.tsv", right_color_set, 1, 90);
-      draw_line(right_graph, "./app/data/d-20_c-2_pr-0.7_msr-0.3_cost.tsv", right_color_set, 1, 90);
-      draw_line(right_graph, "./app/data/d-20_c-2_pr-0.2_msr-0.3_cost.tsv", right_color_set, 1, 90);
-      draw_line(right_graph, "./app/data/d-20_c-2_pr-0.2_msr-0.8_cost.tsv", right_color_set, 1, 90);
-      draw_line(right_graph, "./app/data/d-30_c-2_pr-0.7_msr-0.8_cost.tsv", right_color_set, 2, 90);
-      draw_line(right_graph, "./app/data/d-30_c-2_pr-0.7_msr-0.3_cost.tsv", right_color_set, 2, 90);
-      draw_line(right_graph, "./app/data/d-30_c-2_pr-0.2_msr-0.3_cost.tsv", right_color_set, 2, 90);
-      draw_line(right_graph, "./app/data/d-30_c-2_pr-0.2_msr-0.8_cost.tsv", right_color_set, 2, 90);
-      draw_line(right_graph, "./app/data/d-50_c-2_pr-0.7_msr-0.8_cost.tsv", right_color_set, 3, 90);
-      draw_line(right_graph, "./app/data/d-50_c-2_pr-0.7_msr-0.3_cost.tsv", right_color_set, 3, 90);
-      draw_line(right_graph, "./app/data/d-50_c-2_pr-0.2_msr-0.3_cost.tsv", right_color_set, 3, 90);
-      draw_line(right_graph, "./app/data/d-50_c-2_pr-0.2_msr-0.8_cost.tsv", right_color_set, 3, 90);
+      var left_graph_2 = d3.select("#g2e").append("svg").attr("width", 480).attr("height",350).append("g").attr("transform", "translate(" + margin.left + "," + margin.top + ")");
+      var left_color_set_2 = d3.scale.category10();
+      draw_line(left_graph_2, "./app/data/d-10_c-2_pr-0.7_msr-0.8_effi.tsv", left_color_set_2, 0, 0);
+      draw_line(left_graph_2, "./app/data/d-10_c-2_pr-0.7_msr-0.3_effi.tsv", left_color_set_2, 0, 0);
+      draw_line(left_graph_2, "./app/data/d-10_c-2_pr-0.2_msr-0.3_effi.tsv", left_color_set_2, 0, 0);
+      draw_line(left_graph_2, "./app/data/d-10_c-2_pr-0.2_msr-0.8_effi.tsv", left_color_set_2, 0, 0);
+      draw_line(left_graph_2, "./app/data/d-20_c-2_pr-0.7_msr-0.8_effi.tsv", left_color_set_2, 1, 0);
+      draw_line(left_graph_2, "./app/data/d-20_c-2_pr-0.7_msr-0.3_effi.tsv", left_color_set_2, 1, 0);
+      draw_line(left_graph_2, "./app/data/d-20_c-2_pr-0.2_msr-0.3_effi.tsv", left_color_set_2, 1, 0);
+      draw_line(left_graph_2, "./app/data/d-20_c-2_pr-0.2_msr-0.8_effi.tsv", left_color_set_2, 1, 0);
+      draw_line(left_graph_2, "./app/data/d-30_c-2_pr-0.7_msr-0.8_effi.tsv", left_color_set_2, 2, 0);
+      draw_line(left_graph_2, "./app/data/d-30_c-2_pr-0.7_msr-0.3_effi.tsv", left_color_set_2, 2, 0);
+      draw_line(left_graph_2, "./app/data/d-30_c-2_pr-0.2_msr-0.3_effi.tsv", left_color_set_2, 2, 0);
+      draw_line(left_graph_2, "./app/data/d-30_c-2_pr-0.2_msr-0.8_effi.tsv", left_color_set_2, 2, 0);
+      draw_line(left_graph_2, "./app/data/d-50_c-2_pr-0.7_msr-0.8_effi.tsv", left_color_set_2, 3, 0);
+      draw_line(left_graph_2, "./app/data/d-50_c-2_pr-0.7_msr-0.3_effi.tsv", left_color_set_2, 3, 0);
+      draw_line(left_graph_2, "./app/data/d-50_c-2_pr-0.2_msr-0.3_effi.tsv", left_color_set_2, 3, 0);
+      draw_line(left_graph_2, "./app/data/d-50_c-2_pr-0.2_msr-0.8_effi.tsv", left_color_set_2, 3, 0);
 
-      right_graph.append("text").text("PR = 0.7,").attr("stroke", "#D62728").attr("stroke-width", "1px").attr("x", "280px").attr("y", "150px");
-      right_graph.append("text").text("MS_RATE = 0.8").attr("stroke", "#D62728").attr("stroke-width", "1px").attr("x", "280px").attr("y", "165px");
-      right_graph.append("text").text("PR = 0.2,").attr("stroke", "#D62728").attr("stroke-width", "1px").attr("x", "200px").attr("y", "185px");
-      right_graph.append("text").text("MS_RATE = 0.8").attr("stroke", "#D62728").attr("stroke-width", "1px").attr("x", "200px").attr("y", "200px");
-      right_graph.append("text").text("PR = 0.7,").attr("stroke", "#D62728").attr("stroke-width", "1px").attr("x", "235px").attr("y", "75px");
-      right_graph.append("text").text("MS_RATE = 0.3").attr("stroke", "#D62728").attr("stroke-width", "1px").attr("x", "235px").attr("y", "90px");
-      right_graph.append("text").text("PR = 0.2,").attr("stroke", "#D62728").attr("stroke-width", "1px").attr("x", "165px").attr("y", "125px");
-      right_graph.append("text").text("MS_RATE = 0.3").attr("stroke", "#D62728").attr("stroke-width", "1px").attr("x", "165px").attr("y", "140px");
+      left_graph_2.append("text").text("PR = 0.7,").attr("stroke", "#1F77B4").attr("stroke-width", "1px").attr("x", "170px").attr("y", "85px");
+      left_graph_2.append("text").text("MS_RATE = 0.8").attr("stroke", "#1F77B4").attr("stroke-width", "1px").attr("x", "170px").attr("y", "100px");
+      left_graph_2.append("text").text("PR = 0.2,").attr("stroke", "#1F77B4").attr("stroke-width", "1px").attr("x", "130px").attr("y", "165px");
+      left_graph_2.append("text").text("MS_RATE = 0.8").attr("stroke", "#1F77B4").attr("stroke-width", "1px").attr("x", "130px").attr("y", "180px");
+      left_graph_2.append("text").text("PR = 0.7,").attr("stroke", "#1F77B4").attr("stroke-width", "1px").attr("x", "310px").attr("y", "125px");
+      left_graph_2.append("text").text("MS_RATE = 0.3").attr("stroke", "#1F77B4").attr("stroke-width", "1px").attr("x", "310px").attr("y", "140px");
+      left_graph_2.append("text").text("PR = 0.2,").attr("stroke", "#1F77B4").attr("stroke-width", "1px").attr("x", "270px").attr("y", "205px");
+      left_graph_2.append("text").text("MS_RATE = 0.3").attr("stroke", "#1F77B4").attr("stroke-width", "1px").attr("x", "270px").attr("y", "220px");
 
-      var left_graph = d3.select("#g3e").append("svg").attr("width", 480).attr("height",350).append("g").attr("transform", "translate(" + margin.left + "," + margin.top + ")");
-      var left_color_set = d3.scale.category10();
-      draw_line(left_graph, "./app/data/d-10_c-6_pr-0.7_msr-0.8_effi.tsv", left_color_set, 0, 0);
-      draw_line(left_graph, "./app/data/d-20_c-6_pr-0.7_msr-0.8_effi.tsv", left_color_set, 1, 0);
-      draw_line(left_graph, "./app/data/d-30_c-6_pr-0.7_msr-0.8_effi.tsv", left_color_set, 2, 0);
-      draw_line(left_graph, "./app/data/d-50_c-6_pr-0.7_msr-0.8_effi.tsv", left_color_set, 3, 0);
+      var right_graph_2 = d3.select("#g2c").append("svg").attr("width", 480).attr("height", 350).append("g").attr("transform", "translate(" + margin.left + "," + margin.top + ")");
+      var right_color_set_2 = d3.scale.category10();
+      draw_line(right_graph_2, "./app/data/d-10_c-2_pr-0.7_msr-0.8_cost.tsv", right_color_set_2, 0, 90);
+      draw_line(right_graph_2, "./app/data/d-10_c-2_pr-0.7_msr-0.3_cost.tsv", right_color_set_2, 0, 90);
+      draw_line(right_graph_2, "./app/data/d-10_c-2_pr-0.2_msr-0.3_cost.tsv", right_color_set_2, 0, 90);
+      draw_line(right_graph_2, "./app/data/d-10_c-2_pr-0.2_msr-0.8_cost.tsv", right_color_set_2, 0, 90);
+      draw_line(right_graph_2, "./app/data/d-20_c-2_pr-0.7_msr-0.8_cost.tsv", right_color_set_2, 1, 90);
+      draw_line(right_graph_2, "./app/data/d-20_c-2_pr-0.7_msr-0.3_cost.tsv", right_color_set_2, 1, 90);
+      draw_line(right_graph_2, "./app/data/d-20_c-2_pr-0.2_msr-0.3_cost.tsv", right_color_set_2, 1, 90);
+      draw_line(right_graph_2, "./app/data/d-20_c-2_pr-0.2_msr-0.8_cost.tsv", right_color_set_2, 1, 90);
+      draw_line(right_graph_2, "./app/data/d-30_c-2_pr-0.7_msr-0.8_cost.tsv", right_color_set_2, 2, 90);
+      draw_line(right_graph_2, "./app/data/d-30_c-2_pr-0.7_msr-0.3_cost.tsv", right_color_set_2, 2, 90);
+      draw_line(right_graph_2, "./app/data/d-30_c-2_pr-0.2_msr-0.3_cost.tsv", right_color_set_2, 2, 90);
+      draw_line(right_graph_2, "./app/data/d-30_c-2_pr-0.2_msr-0.8_cost.tsv", right_color_set_2, 2, 90);
+      draw_line(right_graph_2, "./app/data/d-50_c-2_pr-0.7_msr-0.8_cost.tsv", right_color_set_2, 3, 90);
+      draw_line(right_graph_2, "./app/data/d-50_c-2_pr-0.7_msr-0.3_cost.tsv", right_color_set_2, 3, 90);
+      draw_line(right_graph_2, "./app/data/d-50_c-2_pr-0.2_msr-0.3_cost.tsv", right_color_set_2, 3, 90);
+      draw_line(right_graph_2, "./app/data/d-50_c-2_pr-0.2_msr-0.8_cost.tsv", right_color_set_2, 3, 90);
 
-      var right_graph = d3.select("#g3c").append("svg").attr("width", 480).attr("height", 350).append("g").attr("transform", "translate(" + margin.left + "," + margin.top + ")");
-      var right_color_set = d3.scale.category10();
-      draw_line(right_graph, "./app/data/d-10_c-6_pr-0.7_msr-0.8_cost.tsv", right_color_set, 0, 150);
-      draw_line(right_graph, "./app/data/d-20_c-6_pr-0.7_msr-0.8_cost.tsv", right_color_set, 1, 150);
-      draw_line(right_graph, "./app/data/d-30_c-6_pr-0.7_msr-0.8_cost.tsv", right_color_set, 2, 150);
-      draw_line(right_graph, "./app/data/d-50_c-6_pr-0.7_msr-0.8_cost.tsv", right_color_set, 3, 150);
+      right_graph_2.append("text").text("PR = 0.7,").attr("stroke", "#D62728").attr("stroke-width", "1px").attr("x", "280px").attr("y", "150px");
+      right_graph_2.append("text").text("MS_RATE = 0.8").attr("stroke", "#D62728").attr("stroke-width", "1px").attr("x", "280px").attr("y", "165px");
+      right_graph_2.append("text").text("PR = 0.2,").attr("stroke", "#D62728").attr("stroke-width", "1px").attr("x", "200px").attr("y", "185px");
+      right_graph_2.append("text").text("MS_RATE = 0.8").attr("stroke", "#D62728").attr("stroke-width", "1px").attr("x", "200px").attr("y", "200px");
+      right_graph_2.append("text").text("PR = 0.7,").attr("stroke", "#D62728").attr("stroke-width", "1px").attr("x", "235px").attr("y", "75px");
+      right_graph_2.append("text").text("MS_RATE = 0.3").attr("stroke", "#D62728").attr("stroke-width", "1px").attr("x", "235px").attr("y", "90px");
+      right_graph_2.append("text").text("PR = 0.2,").attr("stroke", "#D62728").attr("stroke-width", "1px").attr("x", "165px").attr("y", "125px");
+      right_graph_2.append("text").text("MS_RATE = 0.3").attr("stroke", "#D62728").attr("stroke-width", "1px").attr("x", "165px").attr("y", "140px");
 
-      var left_graph = d3.select("#g4e").append("svg").attr("width", 480).attr("height",350).append("g").attr("transform", "translate(" + margin.left + "," + margin.top + ")");
-      var left_color_set = d3.scale.category10();
-      draw_line(left_graph, "./app/data/d-10_c-6_pr-0.7_msr-0.8_effi.tsv", left_color_set, 0, 0);
-      draw_line(left_graph, "./app/data/d-10_c-6_pr-0.7_msr-0.3_effi.tsv", left_color_set, 0, 0);
-      draw_line(left_graph, "./app/data/d-10_c-6_pr-0.2_msr-0.3_effi.tsv", left_color_set, 0, 0);
-      draw_line(left_graph, "./app/data/d-10_c-6_pr-0.2_msr-0.8_effi.tsv", left_color_set, 0, 0);
-      draw_line(left_graph, "./app/data/d-20_c-6_pr-0.7_msr-0.8_effi.tsv", left_color_set, 1, 0);
-      draw_line(left_graph, "./app/data/d-20_c-6_pr-0.7_msr-0.3_effi.tsv", left_color_set, 1, 0);
-      draw_line(left_graph, "./app/data/d-20_c-6_pr-0.2_msr-0.3_effi.tsv", left_color_set, 1, 0);
-      draw_line(left_graph, "./app/data/d-20_c-6_pr-0.2_msr-0.8_effi.tsv", left_color_set, 1, 0);
-      draw_line(left_graph, "./app/data/d-30_c-6_pr-0.7_msr-0.8_effi.tsv", left_color_set, 2, 0);
-      draw_line(left_graph, "./app/data/d-30_c-6_pr-0.7_msr-0.3_effi.tsv", left_color_set, 2, 0);
-      draw_line(left_graph, "./app/data/d-30_c-6_pr-0.2_msr-0.3_effi.tsv", left_color_set, 2, 0);
-      draw_line(left_graph, "./app/data/d-30_c-6_pr-0.2_msr-0.8_effi.tsv", left_color_set, 2, 0);
-      draw_line(left_graph, "./app/data/d-50_c-6_pr-0.7_msr-0.8_effi.tsv", left_color_set, 3, 0);
-      draw_line(left_graph, "./app/data/d-50_c-6_pr-0.7_msr-0.3_effi.tsv", left_color_set, 3, 0);
-      draw_line(left_graph, "./app/data/d-50_c-6_pr-0.2_msr-0.3_effi.tsv", left_color_set, 3, 0);
-      draw_line(left_graph, "./app/data/d-50_c-6_pr-0.2_msr-0.8_effi.tsv", left_color_set, 3, 0);
+      var left_graph_3 = d3.select("#g3e").append("svg").attr("width", 480).attr("height",350).append("g").attr("transform", "translate(" + margin.left + "," + margin.top + ")");
+      var left_color_set_3 = d3.scale.category10();
+      draw_line(left_graph_3, "./app/data/d-10_c-6_pr-0.7_msr-0.8_effi.tsv", left_color_set_3, 0, 0);
+      draw_line(left_graph_3, "./app/data/d-20_c-6_pr-0.7_msr-0.8_effi.tsv", left_color_set_3, 1, 0);
+      draw_line(left_graph_3, "./app/data/d-30_c-6_pr-0.7_msr-0.8_effi.tsv", left_color_set_3, 2, 0);
+      draw_line(left_graph_3, "./app/data/d-50_c-6_pr-0.7_msr-0.8_effi.tsv", left_color_set_3, 3, 0);
 
-      var right_graph = d3.select("#g4c").append("svg").attr("width", 480).attr("height", 350).append("g").attr("transform", "translate(" + margin.left + "," + margin.top + ")");
-      var right_color_set = d3.scale.category10();
-      draw_line(right_graph, "./app/data/d-10_c-6_pr-0.7_msr-0.8_cost.tsv", right_color_set, 0, 150);
-      draw_line(right_graph, "./app/data/d-10_c-6_pr-0.7_msr-0.3_cost.tsv", right_color_set, 0, 150);
-      draw_line(right_graph, "./app/data/d-10_c-6_pr-0.2_msr-0.3_cost.tsv", right_color_set, 0, 150);
-      draw_line(right_graph, "./app/data/d-10_c-6_pr-0.2_msr-0.8_cost.tsv", right_color_set, 0, 150);
-      draw_line(right_graph, "./app/data/d-20_c-6_pr-0.7_msr-0.8_cost.tsv", right_color_set, 1, 150);
-      draw_line(right_graph, "./app/data/d-20_c-6_pr-0.7_msr-0.3_cost.tsv", right_color_set, 1, 150);
-      draw_line(right_graph, "./app/data/d-20_c-6_pr-0.2_msr-0.3_cost.tsv", right_color_set, 1, 150);
-      draw_line(right_graph, "./app/data/d-20_c-6_pr-0.2_msr-0.8_cost.tsv", right_color_set, 1, 150);
-      draw_line(right_graph, "./app/data/d-30_c-6_pr-0.7_msr-0.8_cost.tsv", right_color_set, 2, 150);
-      draw_line(right_graph, "./app/data/d-30_c-6_pr-0.7_msr-0.3_cost.tsv", right_color_set, 2, 150);
-      draw_line(right_graph, "./app/data/d-30_c-6_pr-0.2_msr-0.3_cost.tsv", right_color_set, 2, 150);
-      draw_line(right_graph, "./app/data/d-30_c-6_pr-0.2_msr-0.8_cost.tsv", right_color_set, 2, 150);
-      draw_line(right_graph, "./app/data/d-50_c-6_pr-0.7_msr-0.8_cost.tsv", right_color_set, 3, 150);
-      draw_line(right_graph, "./app/data/d-50_c-6_pr-0.7_msr-0.3_cost.tsv", right_color_set, 3, 150);
-      draw_line(right_graph, "./app/data/d-50_c-6_pr-0.2_msr-0.3_cost.tsv", right_color_set, 3, 150);
-      draw_line(right_graph, "./app/data/d-50_c-6_pr-0.2_msr-0.8_cost.tsv", right_color_set, 3, 150);
+      left_graph_3.append("text").text("10 m").attr("stroke", "#1F77B4").attr("x", 260).attr("y", 100);
+      left_graph_3.append("text").text("20 m").attr("stroke", "#FF7f0E").attr("x", 100).attr("y", 45);
+      left_graph_3.append("text").text("30 m").attr("stroke", "#2CA02C").attr("x", 60).attr("y", 30);
+      left_graph_3.append("text").text("50 m").attr("stroke", "#D62728").attr("x", 25).attr("y", 20);
+      left_graph_3.append("text").text("COUNTER = 2").attr("stroke", "#222").attr("x", 280).attr("y", 200);
+      left_graph_3.append("text").text("Pr = 0.7").attr("stroke", "#222").attr("x", 280).attr("y", 215);
+      left_graph_3.append("text").text("MS_RATE = 0.8").attr("stroke", "#222").attr("x", 280).attr("y", 230);
+
+      var right_graph_3 = d3.select("#g3c").append("svg").attr("width", 480).attr("height", 350).append("g").attr("transform", "translate(" + margin.left + "," + margin.top + ")");
+      var right_color_set_3 = d3.scale.category10();
+      draw_line(right_graph_3, "./app/data/d-10_c-6_pr-0.7_msr-0.8_cost.tsv", right_color_set_3, 0, 150);
+      draw_line(right_graph_3, "./app/data/d-20_c-6_pr-0.7_msr-0.8_cost.tsv", right_color_set_3, 1, 150);
+      draw_line(right_graph_3, "./app/data/d-30_c-6_pr-0.7_msr-0.8_cost.tsv", right_color_set_3, 2, 150);
+      draw_line(right_graph_3, "./app/data/d-50_c-6_pr-0.7_msr-0.8_cost.tsv", right_color_set_3, 3, 150);
+
+      right_graph_3.append("text").text("10 m").attr("stroke", "#1F77B4").attr("x", 260).attr("y", 240);
+      right_graph_3.append("text").text("20 m").attr("stroke", "#FF7f0E").attr("x", 260).attr("y", 200);
+      right_graph_3.append("text").text("30 m").attr("stroke", "#2CA02C").attr("x", 260).attr("y", 160);
+      right_graph_3.append("text").text("50 m").attr("stroke", "#D62728").attr("x", 260).attr("y", 90);
+      right_graph_3.append("text").text("COUNTER = 6").attr("stroke", "#222").attr("x", 60).attr("y", 30);
+      right_graph_3.append("text").text("Pr = 0.7").attr("stroke", "#222").attr("x", 60).attr("y", 45);
+      right_graph_3.append("text").text("MS_RATE = 0.8").attr("stroke", "#222").attr("x", 60).attr("y", 60);
+
+      var left_graph_4 = d3.select("#g4e").append("svg").attr("width", 480).attr("height",350).append("g").attr("transform", "translate(" + margin.left + "," + margin.top + ")");
+      var left_color_set_4 = d3.scale.category10();
+      draw_line(left_graph_4, "./app/data/d-10_c-6_pr-0.7_msr-0.8_effi.tsv", left_color_set_4, 0, 0);
+      draw_line(left_graph_4, "./app/data/d-10_c-6_pr-0.7_msr-0.3_effi.tsv", left_color_set_4, 0, 0);
+      draw_line(left_graph_4, "./app/data/d-10_c-6_pr-0.2_msr-0.3_effi.tsv", left_color_set_4, 0, 0);
+      draw_line(left_graph_4, "./app/data/d-10_c-6_pr-0.2_msr-0.8_effi.tsv", left_color_set_4, 0, 0);
+      draw_line(left_graph_4, "./app/data/d-20_c-6_pr-0.7_msr-0.8_effi.tsv", left_color_set_4, 1, 0);
+      draw_line(left_graph_4, "./app/data/d-20_c-6_pr-0.7_msr-0.3_effi.tsv", left_color_set_4, 1, 0);
+      draw_line(left_graph_4, "./app/data/d-20_c-6_pr-0.2_msr-0.3_effi.tsv", left_color_set_4, 1, 0);
+      draw_line(left_graph_4, "./app/data/d-20_c-6_pr-0.2_msr-0.8_effi.tsv", left_color_set_4, 1, 0);
+      draw_line(left_graph_4, "./app/data/d-30_c-6_pr-0.7_msr-0.8_effi.tsv", left_color_set_4, 2, 0);
+      draw_line(left_graph_4, "./app/data/d-30_c-6_pr-0.7_msr-0.3_effi.tsv", left_color_set_4, 2, 0);
+      draw_line(left_graph_4, "./app/data/d-30_c-6_pr-0.2_msr-0.3_effi.tsv", left_color_set_4, 2, 0);
+      draw_line(left_graph_4, "./app/data/d-30_c-6_pr-0.2_msr-0.8_effi.tsv", left_color_set_4, 2, 0);
+      draw_line(left_graph_4, "./app/data/d-50_c-6_pr-0.7_msr-0.8_effi.tsv", left_color_set_4, 3, 0);
+      draw_line(left_graph_4, "./app/data/d-50_c-6_pr-0.7_msr-0.3_effi.tsv", left_color_set_4, 3, 0);
+      draw_line(left_graph_4, "./app/data/d-50_c-6_pr-0.2_msr-0.3_effi.tsv", left_color_set_4, 3, 0);
+      draw_line(left_graph_4, "./app/data/d-50_c-6_pr-0.2_msr-0.8_effi.tsv", left_color_set_4, 3, 0);
+
+      left_graph_4.append("text").text("10 m").attr("stroke", "#1F77B4").attr("x", 270).attr("y", 40);
+      left_graph_4.append("text").text("20 m").attr("stroke", "#FF7f0E").attr("x", 100).attr("y", 45);
+      left_graph_4.append("text").text("30 m").attr("stroke", "#2CA02C").attr("x", 60).attr("y", 30);
+      left_graph_4.append("text").text("50 m").attr("stroke", "#D62728").attr("x", 25).attr("y", 20);
+      left_graph_4.append("text").text("COUNTER = 6").attr("stroke", "#222").attr("x", 300).attr("y", 280);
+      left_graph_4.append("text").text("Pr = 0.7, MS_RATE = 0.8").attr("stroke", "#FF7F0E").attr("x", 135).attr("y", 70);
+      left_graph_4.append("text").text("Pr = 0.7, MS_RATE = 0.3").attr("stroke", "#FF7F0E").attr("x", 125).attr("y", 90);
+      left_graph_4.append("text").text("Pr = 0.2, MS_RATE = 0.3").attr("stroke", "#FF7F0E").attr("x", 115).attr("y", 110);
+      left_graph_4.append("text").text("Pr = 0.2, MS_RATE = 0.8").attr("stroke", "#FF7F0E").attr("x", 110).attr("y", 130);
+      left_graph_4.append("text").text("Pr = 0.7, MS_RATE = 0.8").attr("stroke", "#1F77B4").attr("x", 270).attr("y", 100);
+      left_graph_4.append("text").text("Pr = 0.7, MS_RATE = 0.3").attr("stroke", "#1F77B4").attr("x", 255).attr("y", 120);
+      left_graph_4.append("text").text("Pr = 0.2, MS_RATE = 0.3").attr("stroke", "#1F77B4").attr("x", 245).attr("y", 140);
+      left_graph_4.append("text").text("Pr = 0.2, MS_RATE = 0.8").attr("stroke", "#1F77B4").attr("x", 240).attr("y", 160);
+
+
+      var right_graph_4 = d3.select("#g4c").append("svg").attr("width", 480).attr("height", 350).append("g").attr("transform", "translate(" + margin.left + "," + margin.top + ")");
+      var right_color_set_4 = d3.scale.category10();
+      draw_line(right_graph_4, "./app/data/d-10_c-6_pr-0.7_msr-0.8_cost.tsv", right_color_set_4, 0, 150);
+      draw_line(right_graph_4, "./app/data/d-10_c-6_pr-0.7_msr-0.3_cost.tsv", right_color_set_4, 0, 150);
+      draw_line(right_graph_4, "./app/data/d-10_c-6_pr-0.2_msr-0.3_cost.tsv", right_color_set_4, 0, 150);
+      draw_line(right_graph_4, "./app/data/d-10_c-6_pr-0.2_msr-0.8_cost.tsv", right_color_set_4, 0, 150);
+      draw_line(right_graph_4, "./app/data/d-20_c-6_pr-0.7_msr-0.8_cost.tsv", right_color_set_4, 1, 150);
+      draw_line(right_graph_4, "./app/data/d-20_c-6_pr-0.7_msr-0.3_cost.tsv", right_color_set_4, 1, 150);
+      draw_line(right_graph_4, "./app/data/d-20_c-6_pr-0.2_msr-0.3_cost.tsv", right_color_set_4, 1, 150);
+      draw_line(right_graph_4, "./app/data/d-20_c-6_pr-0.2_msr-0.8_cost.tsv", right_color_set_4, 1, 150);
+      draw_line(right_graph_4, "./app/data/d-30_c-6_pr-0.7_msr-0.8_cost.tsv", right_color_set_4, 2, 150);
+      draw_line(right_graph_4, "./app/data/d-30_c-6_pr-0.7_msr-0.3_cost.tsv", right_color_set_4, 2, 150);
+      draw_line(right_graph_4, "./app/data/d-30_c-6_pr-0.2_msr-0.3_cost.tsv", right_color_set_4, 2, 150);
+      draw_line(right_graph_4, "./app/data/d-30_c-6_pr-0.2_msr-0.8_cost.tsv", right_color_set_4, 2, 150);
+      draw_line(right_graph_4, "./app/data/d-50_c-6_pr-0.7_msr-0.8_cost.tsv", right_color_set_4, 3, 150);
+      draw_line(right_graph_4, "./app/data/d-50_c-6_pr-0.7_msr-0.3_cost.tsv", right_color_set_4, 3, 150);
+      draw_line(right_graph_4, "./app/data/d-50_c-6_pr-0.2_msr-0.3_cost.tsv", right_color_set_4, 3, 150);
+      draw_line(right_graph_4, "./app/data/d-50_c-6_pr-0.2_msr-0.8_cost.tsv", right_color_set_4, 3, 150);
+
+      right_graph_4.append("text").text("COUNTER = 6").attr("stroke", "#222").attr("x", 30).attr("y", 28);
+      right_graph_4.append("text").text("10 m").attr("stroke", "#1F77B4").attr("x", 260).attr("y", 240);
+      right_graph_4.append("text").text("20 m").attr("stroke", "#FF7f0E").attr("x", 260).attr("y", 200);
+      right_graph_4.append("text").text("30 m").attr("stroke", "#2CA02C").attr("x", 260).attr("y", 160);
+      right_graph_4.append("text").text("50 m").attr("stroke", "#D62728").attr("x", 260).attr("y", 80);
+      right_graph_4.append("text").text("Pr = 0.7, MS_RATE = 0.8").attr("stroke", "#D62728").attr("x", 135).attr("y", 100);
+      right_graph_4.append("text").text("Pr = 0.7, MS_RATE = 0.3").attr("stroke", "#D62728").attr("x", 115).attr("y", 120);
+      right_graph_4.append("text").text("Pr = 0.2, MS_RATE = 0.3").attr("stroke", "#D62728").attr("x", 85).attr("y", 140);
+      right_graph_4.append("text").text("Pr = 0.2, MS_RATE = 0.8").attr("stroke", "#D62728").attr("x", 60).attr("y", 160);
+
     </script>
   </body>
 </html>

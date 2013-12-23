@@ -32,8 +32,7 @@ section {
 
 .page {
   width: 960px;
-  height: 1000px;
-  padding: 20px 60px;
+  padding: 20px 60px 40px;
   margin: 0 auto;
   border: 1px solid #BBB;
   background-color: #FFF;
