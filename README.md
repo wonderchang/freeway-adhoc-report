@@ -12,11 +12,10 @@ You can see the directory "app" that contains the source code for simulation.
 		main.js: the main program
 		data/: the directory that collect the output file from the main.js
 		run.sh: shell script file, help to run different inputing parameter by one command
+#How to use
 
 This program is written by Javascript. 
 The working environment should require Google Chrome V8 Engine Interpreter and Nodejs which is a system driven module.
-
-#How to use
 
 ###First
 If you had installed Google Chrome browser, you have already had V8 Engine Interpreter.
