@@ -1,6 +1,6 @@
 var CAR_NO = 0;
 var REACHABLE_DISTANCE = 100;
-var freeway = d3.select("#freeway").append("svg");
+var freeway = d3.select("#freeway").append("svg").attr('width', 960);
 
 var running_car = setInterval(emit_car, 250);
 

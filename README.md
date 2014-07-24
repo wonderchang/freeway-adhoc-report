@@ -2,9 +2,9 @@
 
 NCKUEE, Computer Communication Network, homework #4.
 
-Teacher: 蘇淑茵
+Teacher: Sok-Ian Sou (蘇淑茵)
 
-Student: EE103A E24990019 張遠哲
+Student: EE103A E24990019 Yuen-Che Chang, Wonder Chang (張遠哲)
 
 Report See: [http://wonderbee.no-ip.biz/freeway-ad-hoc](http://wonderbee.no-ip.biz/freeway-ad-hoc)
 
