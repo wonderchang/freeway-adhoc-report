@@ -6,7 +6,7 @@ Teacher: Sok-Ian Sou (蘇淑茵)
 
 Student: EE103A E24990019 Yuen-Che Chang, Wonder Chang (張遠哲)
 
-Report See: [http://iwonder.tw/freeway-adhoc-report](http://iwonder.tw/freeway-adhoc-report)
+See the [report](http://wonderchang.github.io/freeway-adhoc-report/).
 
 #Source Listing
 
@@ -48,4 +48,3 @@ Open the command line. Type
 
 The after four inputting arguments are required. All the detail and the arugment meanings see the website report.
 
-Report See: [http://iwonder.tw/freeway-adhoc-report](http://iwonder.tw/freeway-adhoc-report)
